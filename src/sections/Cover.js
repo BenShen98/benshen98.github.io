@@ -8,6 +8,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import {Box, Grid, Container} from '@material-ui/core';
 import {Button, ButtonGroup}  from '@material-ui/core';
 import {BottomNavigation, BottomNavigationAction}  from '@material-ui/core';
+import {Link}  from '@material-ui/core';
+
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
@@ -41,8 +43,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   mainIntro: {
-    "& div":{
-      margin: theme.spacing(2) //margin for buttonGroup
+    "& > *":{
+      marginTop: theme.spacing(2) //margin for buttonGroup
     }
   },
 
@@ -61,6 +63,19 @@ const useStyles = makeStyles((theme) => ({
       width: scrollIconHeight
     }
 
+  },
+
+  ad:{
+    textAlign: "left",
+    "&::before": {
+      color: "#46a049",
+      border: "1px solid #46a049",
+      content: "'Ad'",
+      padding: "1px 5px",
+      fontSize: "0.875rem",
+      marginRight: "6px",
+      borderRadius: "3px",
+    }
   },
 
   test:{
@@ -110,18 +125,26 @@ export default function Cover() {
 function MainIntro(){
   const classes = useStyles();
 
+  const preventDefault = (e) => e.preventDefault()
+
 
   return (
     <>
+      <Link href="" className={classes.ad} onClick={preventDefault}>
+        <b>Looking for Full-Time Position</b> Imperial College Preliminary Year Student who Understand Project Management
+      </Link>
+
+
       <Typography variant="h1">
         Ben Shen's Reactive Portfolio
       </Typography>
 
-      <ButtonGroup >
+      <ButtonGroup>
         <Button startIcon={<AttachFileIcon />}>Curriculum </Button>
         <Button startIcon={<GitHubIcon />}>GitHub</Button>
         <Button startIcon={<LinkedInIcon />}>LinkedIn</Button>
       </ButtonGroup>
+
     </>
   );
 }
