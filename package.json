@@ -12,11 +12,13 @@
   },
   "dependencies": {
     "@material-ui/core": "latest",
+    "@material-ui/icons": "latest",
     "clsx": "latest",
     "react": "latest",
     "react-dom": "latest",
     "react-scripts": "latest",
-    "gh-pages": "latest"
+    "gh-pages": "latest",
+    "markdown-to-jsx": "latest"
   },
   "browserslist": {
     "production": [
