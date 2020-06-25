@@ -93,7 +93,7 @@ export default function Cover() {
   const classes = useStyles();
 
   return (
-    <> {/* height is style (reason for box exist) */}
+    <Container maxWidth="sm">
 
       <Grid container className={classes.main} >
 
@@ -116,7 +116,7 @@ export default function Cover() {
         </IconButton>
       </Grid>
 
-    </>
+    </Container>
   );
 }
 
@@ -161,8 +161,8 @@ function MainSummary(){
         showLabels
         onChange={ (_,id) => (setSectionId(id)) }
       >
-        {summaryData.map((d) => (
-          <BottomNavigationAction label={d.label} icon={d.icon} />
+        {summaryData.map((d, i) => (
+          <BottomNavigationAction key={i} label={d.label} icon={d.icon} />
         ))}
       </BottomNavigation>
 

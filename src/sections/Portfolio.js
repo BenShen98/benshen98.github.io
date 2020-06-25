@@ -1,21 +1,18 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
+
+import {Box, Grid, Container} from '@material-ui/core';
+
+
+import ProjectCard from '../components/ProjectCard'
 
 //debugging
 import { Paper } from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme) => ({
-  placeholder: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    width: "100%",
-    height: theme.spacing(10),
-    "background-color": "#C0C0C0"
-  },
+
 }));
 
 function SimplePaper() {
@@ -34,11 +31,44 @@ export default function Portfolio() {
   const classes = useStyles();
 
   return (
-    <Box>
-      <Paper className={classes.placeholder}/>
+    <Container maxWidth="lg">
 
 
 
-    </Box>
+    {/* Grid full of containers */}
+    <Grid spacing={2} justify="center" container>
+
+      <Grid item>
+      <ProjectCard />
+      </Grid>
+
+      <Grid item>
+      <ProjectCard />
+      </Grid>
+
+
+      <Grid item>
+      <ProjectCard />
+      </Grid>
+
+
+      <Grid item>
+      <ProjectCard />
+      </Grid>
+
+      <Grid item>
+      <ProjectCard />
+      </Grid>
+
+
+      <Grid item>
+      <ProjectCard />
+      </Grid>
+
+    </Grid>
+
+
+
+    </Container>
   );
 }

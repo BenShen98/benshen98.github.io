@@ -17,14 +17,11 @@ ReactDOM.render(
     {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
     <CssBaseline />
 
-    <Container maxWidth="sm">
       {/* Cover Page */}
       <CoverSection />
 
       {/* Projects */}
       <Portfolio />
-
-    </Container>
 
   </ThemeProvider>,
   document.querySelector('#root'),
