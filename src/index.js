@@ -17,7 +17,7 @@ ReactDOM.render(
     {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
     <CssBaseline />
 
-    <Container maxWidth="md">
+    <Container maxWidth="sm">
       {/* Cover Page */}
       <CoverSection />
 
