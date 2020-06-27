@@ -33,16 +33,38 @@ export default function ProgressChart(props){
   const unit=props.unit || "bytes"
   const classes = useStyles();
 
-  // progress calculation
-  const acc = data.reduce((acc, d) => acc+d.value , 0)
-
   // key display
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [index, setIndex] = React.useState(0);
   const open = Boolean(anchorEl)
 
+  // early exit if data is none
+  if (typeof data == 'undefined'){
+    return(
+      <>
+        <div className={classes.root}>
+          <span
+            style={{backgroundColor: "#808080"}}
+            onMouseOver={(e) => {setAnchorEl(e.currentTarget);}}
+            onMouseOut={(e) => setAnchorEl(null)}
+          />
+        </div>
+
+        <Popper  open={open} anchorEl={anchorEl}>
+          <div className={classes.popup}>
+            Data not available
+          </div>
+        </Popper>
+      </>
+    )
+  }
+
+
+  // progress calculation
+  const acc = data.reduce((acc, d) => acc+d.value , 0)
+
   return (
-    <div>
+    <>
       {/* progress chart */}
       <div className={classes.root} >
         <span>{
@@ -52,7 +74,7 @@ export default function ProgressChart(props){
               onMouseOver={(e) => {setAnchorEl(e.currentTarget); setIndex(i)}}
               onMouseOut={(e) => setAnchorEl(null)}
               key={i}
-            ></span>
+            />
           ))
 
         }</span>
@@ -66,6 +88,6 @@ export default function ProgressChart(props){
       </Popper>
 
 
-    </div>
+    </>
   )
 }

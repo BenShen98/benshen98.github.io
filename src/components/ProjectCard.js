@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
@@ -19,6 +19,9 @@ import category2icon from '../theme/category2icon'
 
 import ProgressChart from './ProgressChart';
 
+import Markdown from 'markdown-to-jsx';
+
+import Fab from "@material-ui/core/Fab";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,8 +30,13 @@ const useStyles = makeStyles((theme) => ({
   },
   media: {
     height: 0,
-    paddingTop: '56.25%', // 16:9
+    paddingTop: '56.25%', // 16:9,
+
   },
+  clickable: {
+    cursor: "pointer"
+  },
+
   expand: {
     transform: 'rotate(0deg)',
     // marginLeft: 'auto',
@@ -44,61 +52,88 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const data = [
-  { color: '#0000ff', name: 'Group A', value: 400 , unit: "bytes"},
-  { color: '#ff9999', name: 'Group B', value: 300 , unit: "bytes"},
-  { color: '#66ccff', name: 'Group C', value: 300 , unit: "bytes"},
-  { color: '#009933', name: 'Group D', value: 200 , unit: "bytes"},
-];
 
 
 
-export default function ProjectCard(props) {
+export default function ProjectCard({projectData, setPreviewContext, setUserPrompt}) {
 
   //  handel input
-  const project = props.project
-  const icon = category2icon(project.category || "")
-
-
+  const categoryIcon = category2icon(projectData.category || "")
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+  function handelSourceCodeClick (e){
+    e.preventDefault()
+
+    if (typeof projectData.sourceCode != "string" || projectData.sourceCode.length <= 0){
+      setUserPrompt ({info: `The Source Code for ${projectData.title} is not publicly available`})
+      return
+    }
+
+    window.open(
+      projectData.sourceCode,
+      '_blank'
+    )
+
   };
+
+  function handelPreviewClick(e){
+    e.preventDefault()
+
+    if (typeof projectData.preview == "undefined"){
+      setUserPrompt ({info: `The Preview for ${projectData.title} is not currently available`})
+      return
+    }
+
+    setPreviewContext(projectData)
+
+  };
+
+
 
   return (
     <Card className={classes.root}>
 
       <CardHeader
+        // category
         avatar={
-          <Avatar alt="" aria-label="recipe" style={{backgroundColor: icon.backgroundColor}}>
-            {icon.icon}
+          <Avatar alt="" aria-label="recipe" style={{backgroundColor: categoryIcon.backgroundColor}}>
+            {categoryIcon.icon}
           </Avatar>
         }
+
+
         action={
-          <IconButton aria-label="Source Code">
+          <IconButton aria-label="Source Code"
+            onClick={handelSourceCodeClick} href={projectData.sourceCode}
+          >
             <GitHubIcon />
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
+        title={projectData.title}
+        subheader={projectData.date}
       />
 
-      <ProgressChart data={data} unit="bytes" />
+      <ProgressChart data={projectData.codeComposition} unit="bytes" />
 
       <CardMedia
-        className={classes.media}
+        className={clsx(classes.media,{
+          [classes.clickable]: typeof projectData.preview != "undefined"
+        })}
         image="/static/images/cards/paella.jpg"
         title="Paella dish"
+        onClick={handelPreviewClick}
       />
 
 
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
+        {/* <Typography variant="body2" color="textSecondary" component="p">
           This impressive paella is a perfect party dish and a fun meal to cook together with your
           guests. Add 1 cup of frozen peas along with the mussels, if you like.
-        </Typography>
+        </Typography> */}
+        <Markdown
+          children={projectData.summary}
+        />
+
       </CardContent>
 
       <CardActions disableSpacing>
@@ -108,24 +143,7 @@ export default function ProjectCard(props) {
         <IconButton aria-label="share">
           <ShareIcon />
         </IconButton>
-        <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </IconButton>
       </CardActions>
-
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography paragraph>Method:</Typography>
-        </CardContent>
-      </Collapse>
-
     </Card>
   );
 }

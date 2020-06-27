@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -6,9 +6,11 @@ import {Box, Grid, Container} from '@material-ui/core';
 
 
 import ProjectCard from '../components/ProjectCard'
+import PreviewDialog from '../components/PreviewDialog'
 
 //debugging
 import { Paper } from '@material-ui/core';
+import Markdown from 'markdown-to-jsx';
 
 import GitHubIcon from '@material-ui/icons/GitHub';
 
@@ -16,27 +18,42 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-function SimplePaper() {
-  const classes = useStyles();
+const maxWidth='lg'
+var xxxx=`
+Raft
+======
 
-  return (
-    <div className={classes.root} id="xxx">
-      <Paper elevation={0} />
-      <Paper />
-      <Paper elevation={3} />
-    </div>
-  );
-}
+Component Structure
+-------------------
+
+### Instance Initiation and Flow of Message
+`
 
 var projectData = {
-  category: "Academic"
+  category: "Academic",
+  title: "FooBoxxxxxxxxxxxxxxxxxxxxxo",
+  date: "Sept 2016",
+  summary: "fooboooxxx",
+
+  sourceCode: "https://google.com",
+  preview: <Markdown children={xxxx} />,
+  // codeComposition:[
+  //   { color: '#0000ff', name: 'Group A', value: 400},
+  //   { color: '#ff9999', name: 'Group B', value: 300},
+  //   { color: '#66ccff', name: 'Group C', value: 300},
+  //   { color: '#009933', name: 'Group D', value: 200},
+  // ]
+
 }
 
-export default function Portfolio() {
+export default function Portfolio(props) {
+
+  const [previewContext, setPreviewContext] = useState(undefined)
   const classes = useStyles();
 
+
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth={maxWidth}>
 
 
 
@@ -44,7 +61,11 @@ export default function Portfolio() {
     <Grid spacing={2} justify="center" container>
 
       <Grid item>
-      <ProjectCard project={projectData}/>
+      <ProjectCard
+        {...props}
+        projectData={projectData}
+        setPreviewContext={setPreviewContext}
+      />
       </Grid>
 
       {/* <Grid item>
@@ -72,7 +93,13 @@ export default function Portfolio() {
 
     </Grid>
 
-
+    <PreviewDialog
+      {...props}
+      previewContext={previewContext}
+      setPreviewContext={setPreviewContext}
+      fullWidth={true}
+      maxWidth={maxWidth}
+    />
 
     </Container>
   );

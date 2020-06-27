@@ -95,7 +95,7 @@ export default function Cover() {
   return (
     <Container maxWidth="sm">
 
-      <Grid container alignItem="center" className={classes.main} >
+      <Grid container className={classes.main} >
 
         {/* Intro (Welcome and Links) */}
         <Grid item xs={12} className={classes.mainIntro}>
@@ -164,7 +164,7 @@ function MainSummary(){
         {summaryData.map( function(d, i){
           var {icon} = category2icon(d.category);
           return (
-            <BottomNavigationAction key={i} label={d.label} icon={icon} />
+            <BottomNavigationAction key={i} label={d.category} icon={icon} />
           )
         })}
       </BottomNavigation>

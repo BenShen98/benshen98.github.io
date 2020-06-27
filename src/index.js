@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -9,20 +9,38 @@ import theme from './theme';
 // own components
 import CoverSection from './sections/Cover';
 import Portfolio from './sections/Portfolio';
+import UserPromptBar from './components/UserPromptBar'
 
 
 
-ReactDOM.render(
-  <ThemeProvider theme={theme}>
+export default function App(){
+  const [userPrompt, setUserPrompt] = useState({info:""}) // {severity: message}
+
+  return(
+    <ThemeProvider theme={theme}>
     {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
     <CssBaseline />
 
       {/* Cover Page */}
-      <CoverSection />
+      <CoverSection setUserPrompt={setUserPrompt} />
 
       {/* Projects */}
-      <Portfolio />
+      <Portfolio setUserPrompt={setUserPrompt} />
 
-  </ThemeProvider>,
+      {/* Banner */}
+      <UserPromptBar
+        duration={5000}
+        userPrompt={userPrompt}
+        setUserPrompt={setUserPrompt}
+      />
+
+
+
+    </ThemeProvider>
+  )
+}
+
+ReactDOM.render(
+  <App />,
   document.querySelector('#root'),
 );
