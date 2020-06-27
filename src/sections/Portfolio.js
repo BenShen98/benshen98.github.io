@@ -10,6 +10,7 @@ import ProjectCard from '../components/ProjectCard'
 //debugging
 import { Paper } from '@material-ui/core';
 
+import GitHubIcon from '@material-ui/icons/GitHub';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -27,6 +28,10 @@ function SimplePaper() {
   );
 }
 
+var projectData = {
+  category: "Academic"
+}
+
 export default function Portfolio() {
   const classes = useStyles();
 
@@ -39,6 +44,20 @@ export default function Portfolio() {
     <Grid spacing={2} justify="center" container>
 
       <Grid item>
+      <ProjectCard project={projectData}/>
+      </Grid>
+
+      {/* <Grid item>
+      <ProjectCard />
+      </Grid>
+
+
+      <Grid item>
+      <ProjectCard />
+      </Grid>
+
+
+      <Grid item>
       <ProjectCard />
       </Grid>
 
@@ -49,21 +68,7 @@ export default function Portfolio() {
 
       <Grid item>
       <ProjectCard />
-      </Grid>
-
-
-      <Grid item>
-      <ProjectCard />
-      </Grid>
-
-      <Grid item>
-      <ProjectCard />
-      </Grid>
-
-
-      <Grid item>
-      <ProjectCard />
-      </Grid>
+      </Grid> */}
 
     </Grid>
 

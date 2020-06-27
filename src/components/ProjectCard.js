@@ -13,7 +13,9 @@ import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import GitHubIcon from '@material-ui/icons/GitHub';
+
+import category2icon from '../theme/category2icon'
 
 import ProgressChart from './ProgressChart';
 
@@ -50,7 +52,14 @@ const data = [
 ];
 
 
-export default function RecipeReviewCard() {
+
+export default function ProjectCard(props) {
+
+  //  handel input
+  const project = props.project
+  const icon = category2icon(project.category || "")
+
+
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -63,13 +72,13 @@ export default function RecipeReviewCard() {
 
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            R
+          <Avatar alt="" aria-label="recipe" style={{backgroundColor: icon.backgroundColor}}>
+            {icon.icon}
           </Avatar>
         }
         action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
+          <IconButton aria-label="Source Code">
+            <GitHubIcon />
           </IconButton>
         }
         title="Shrimp and Chorizo Paella"
