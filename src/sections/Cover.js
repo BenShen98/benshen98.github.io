@@ -20,7 +20,7 @@ import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import LinkIcon from '@material-ui/icons/Link';
 // import LinkIcon from '@material-ui/icons';
 
-
+import category2icon from '../theme/category2icon'
 
 import { positions } from '@material-ui/system';
 
@@ -93,7 +93,7 @@ export default function Cover() {
   const classes = useStyles();
 
   return (
-    <> {/* height is style (reason for box exist) */}
+    <Container maxWidth="sm">
 
       <Grid container className={classes.main} >
 
@@ -116,7 +116,7 @@ export default function Cover() {
         </IconButton>
       </Grid>
 
-    </>
+    </Container>
   );
 }
 
@@ -161,9 +161,12 @@ function MainSummary(){
         showLabels
         onChange={ (_,id) => (setSectionId(id)) }
       >
-        {summaryData.map((d) => (
-          <BottomNavigationAction label={d.label} icon={d.icon} />
-        ))}
+        {summaryData.map( function(d, i){
+          var {icon} = category2icon(d.category);
+          return (
+            <BottomNavigationAction key={i} label={d.category} icon={icon} />
+          )
+        })}
       </BottomNavigation>
 
 
