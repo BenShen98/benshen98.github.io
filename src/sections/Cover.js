@@ -30,57 +30,60 @@ import coverSummaryGen from '../data/cover_summary'
 import { Paper } from '@material-ui/core';
 
 
-const topMargin = "48px"
-const scrollIconHeight = "56px"
-const buttonMargin = "16px"
+const pageTopMargin = "48px"
+const coverScrollHeight = "56px"
+const bottomMargin = "16px"
+
+const coverMainSummaryButtonHeight='56px'
 
 const useStyles = makeStyles((theme) => ({
 
-  main:{
-    height: `calc(100vh - ${scrollIconHeight} - ${topMargin} - ${buttonMargin})`,
-    marginTop: topMargin,
+  coverMain:{
+    height: `calc(100vh - ${coverScrollHeight} - ${pageTopMargin} - ${bottomMargin})`,
+    marginTop: pageTopMargin,
     textAlign: "center",
-  },
 
-  mainIntro: {
-    marginBottom: theme.spacing(3),
+    // INTRO
+    '& #coverMainIntro':{
+      marginBottom: theme.spacing(3),
 
-    "& > *":{
-      marginTop: theme.spacing(2) //margin for buttonGroup
-    },
-  },
-
-  mainSummary: {
-    margin: theme.spacing(1),
-    // maxHeight: "50%",
-    textAlign: "left",
-
-    "& button":{
-      paddingLeft: theme.spacing(3),
-      paddingRight: theme.spacing(3)
+      "& > *":{
+        marginTop: theme.spacing(2) //space out intro
+      },
     },
 
-    "& ul": {marginTop: theme.spacing(1)},
+    // SUMMARY
+    '& #coverMainSummary':{
+      margin: theme.spacing(1),
+      height: "60%",
+      textAlign: "left",
+    },
 
-    "& li": {marginBottom: theme.spacing(1)},
+    "& #coverMainSummaryButton":{
+      height: coverMainSummaryButtonHeight,
+    },
+
+    '& #coverMainSummaryPopper':{
+      padding: theme.spacing(1)
+    },
+
+    '& #coverMainSummaryContent':{
+      overflow: "auto",
+      height: `calc(100% - ${coverMainSummaryButtonHeight})`,
+
+      "& ul": {marginTop: theme.spacing(1)},
+      "& li": {marginBottom: theme.spacing(1)},
+    },
+
   },
 
-  mainSummaryPopover:{
-    padding: theme.spacing(1)
-  },
-
-  mainSummaryContent:{
-    overflow: "auto"
-  },
-
-  bottomScroll: {
+  coverScroll: {
     justifyContent: "center",
-    marginBottom: buttonMargin,
+    marginBottom: bottomMargin,
     "& svg": {
-      height: scrollIconHeight,
-      width: scrollIconHeight
+      height: coverScrollHeight,
+      width: coverScrollHeight
     }
-
   },
 
   ad:{
@@ -103,20 +106,20 @@ export default function Cover() {
   const classes = useStyles();
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="md" id='cover'>
 
-      <Box className={classes.main} >
+      <Box className={classes.coverMain} id='coverMain'>
 
         {/* Intro (Welcome and Links) */}
-        <MainIntro/>
+        <CoverMainIntro/>
 
         {/* SUMMARY */}
-        <MainSummary/>
+        <CoverMainSummary/>
 
       </Box>
 
       {/* Scroll Down Icon */}
-      <Grid container className={classes.bottomScroll}>
+      <Grid container className={classes.coverScroll} id='coverScroll'>
         <IconButton aria-label='scroll-down' >
           <ExpandMoreIcon />
         </IconButton>
@@ -128,14 +131,14 @@ export default function Cover() {
 
 // SUB SECTIONS
 
-function MainIntro(){
+function CoverMainIntro(){
   const classes = useStyles();
 
   const preventDefault = (e) => e.preventDefault()
 
 
   return (
-    <Box className={classes.mainIntro}>
+    <Box id='coverMainIntro'>
       <Link href="" className={classes.ad} onClick={preventDefault}>
         <b>Looking for Full-Time Position</b> Imperial College Preliminary Year Student who Understand Project Management
       </Link>
@@ -155,7 +158,7 @@ function MainIntro(){
   );
 }
 
-function MainSummary(){
+function CoverMainSummary(){
   const classes = useStyles();
 
   const [sectionId, setSectionId] = useState(0)
@@ -165,13 +168,14 @@ function MainSummary(){
   const summaryData = coverSummaryGen()
 
   return(
-    <Paper className={classes.mainSummary} >
+    <Paper className={classes.mainSummary} id='coverMainSummary'>
 
       {/* Selection UI */}
       <BottomNavigation
         value={sectionId}
         showLabels
         onChange={ (_,id) => (setSectionId(id)) }
+        id='coverMainSummaryButton'
       >
         {summaryData.map( function(d, i){
           var {icon} = category2icon(d.category);
@@ -194,14 +198,14 @@ function MainSummary(){
         anchorEl={anchorEl}
         placement="top"
         >
-          <Paper className={classes.mainSummaryPopover}>
+          <Paper className={classes.mainSummaryPopover} id='coverMainSummaryPopper'>
             {summaryData[hoverId].img}
           </Paper>
         </Popper>)
       : <></>}
 
       {/* Content */}
-      <Box mx={3} className={classes.mainSummaryContent}>
+      <Box mx={3} className={classes.mainSummaryContent} id='coverMainSummaryContent'>
         {summaryData[sectionId].content}
       </Box>
     </Paper>
