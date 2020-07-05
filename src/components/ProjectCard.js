@@ -27,14 +27,28 @@ import Fab from "@material-ui/core/Fab";
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
+    minWidth: 273,
   },
   media: {
-    height: 0,
-    paddingTop: '56.25%', // 16:9,
-
+    height: "200px",
+    margin: theme.spacing(1),
   },
-  clickable: {
-    cursor: "pointer"
+  clickableMedia: {
+    cursor: "pointer",
+    "&:hover::after":{
+      display: "block",
+      position: "relative",
+
+      color: "#ffffff",
+      content: "'\\A \\A \\A Click to view Preview'",
+      whiteSpace: "pre",
+      fontSize: "large",
+
+      backgroundColor: "#000000cc",
+      textAlign: "center",
+      height: "100%",
+      width: "100%",
+    },
   },
 
   expand: {
@@ -117,7 +131,7 @@ export default function ProjectCard({projectData, setPreviewContext, setUserProm
 
       <CardMedia
         className={clsx(classes.media,{
-          [classes.clickable]: typeof projectData.preview != "undefined"
+          [classes.clickableMedia]: typeof projectData.preview != "undefined"
         })}
         image={projectData.imgSrc}
         onClick={handelPreviewClick}
