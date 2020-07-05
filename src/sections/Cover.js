@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
-import {Box, Grid, Container} from '@material-ui/core';
+import {Box, Grid, Container, Popper} from '@material-ui/core';
 import {Button, ButtonGroup}  from '@material-ui/core';
 import {BottomNavigation, BottomNavigationAction}  from '@material-ui/core';
 import {Link}  from '@material-ui/core';
@@ -24,45 +24,66 @@ import category2icon from '../theme/category2icon'
 
 import { positions } from '@material-ui/system';
 
-import summaryData from '../data/cover_summary'
+import coverSummaryGen from '../data/cover_summary'
 
 //debugging
 import { Paper } from '@material-ui/core';
 
 
-const topMargin = "48px"
-const scrollIconHeight = "56px"
-const buttonMargin = "16px"
+const pageTopMargin = "48px"
+const coverScrollHeight = "56px"
+const bottomMargin = "16px"
+
+const coverMainSummaryButtonHeight='56px'
 
 const useStyles = makeStyles((theme) => ({
 
-  main:{
-    height: `calc(100vh - ${scrollIconHeight} - ${topMargin} - ${buttonMargin})`,
-    marginTop: topMargin,
+  coverMain:{
+    height: `calc(100vh - ${coverScrollHeight} - ${pageTopMargin} - ${bottomMargin})`,
+    marginTop: pageTopMargin,
     textAlign: "center",
+
+    // INTRO
+    '& #coverMainIntro':{
+      marginBottom: theme.spacing(3),
+
+      "& > *":{
+        marginTop: theme.spacing(2) //space out intro
+      },
+    },
+
+    // SUMMARY
+    '& #coverMainSummary':{
+      margin: theme.spacing(1),
+      height: "60%",
+      textAlign: "left",
+    },
+
+    "& #coverMainSummaryButton":{
+      height: coverMainSummaryButtonHeight,
+    },
+
+    '& #coverMainSummaryPopper':{
+      padding: theme.spacing(1)
+    },
+
+    '& #coverMainSummaryContent':{
+      overflow: "auto",
+      height: `calc(100% - ${coverMainSummaryButtonHeight})`,
+
+      "& ul": {marginTop: theme.spacing(1)},
+      "& li": {marginBottom: theme.spacing(1)},
+    },
+
   },
 
-  mainIntro: {
-    "& > *":{
-      marginTop: theme.spacing(2) //margin for buttonGroup
-    }
-  },
-
-  mainSummary: {
-    "& button":{
-      paddingLeft: theme.spacing(3),
-      paddingRight: theme.spacing(3)
-    }
-  },
-
-  centerScrolling: {
+  coverScroll: {
     justifyContent: "center",
-    marginBottom: buttonMargin,
+    marginBottom: bottomMargin,
     "& svg": {
-      height: scrollIconHeight,
-      width: scrollIconHeight
+      height: coverScrollHeight,
+      width: coverScrollHeight
     }
-
   },
 
   ad:{
@@ -78,14 +99,6 @@ const useStyles = makeStyles((theme) => ({
     }
   },
 
-  test:{
-    margin: theme.spacing(1),
-    // width: "100%",
-    height: theme.spacing(40),
-    "background-color": "#C0C0C0",
-    textAlign: "left",
-  }
-
 }));
 
 
@@ -93,24 +106,20 @@ export default function Cover() {
   const classes = useStyles();
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="md" id='cover'>
 
-      <Grid container className={classes.main} >
+      <Box className={classes.coverMain} id='coverMain'>
 
         {/* Intro (Welcome and Links) */}
-        <Grid item xs={12} className={classes.mainIntro}>
-          <MainIntro/>
-        </Grid>
+        <CoverMainIntro/>
 
         {/* SUMMARY */}
-        <Grid item xs={12} className={classes.mainSummary}>
-          <MainSummary/>
-        </Grid>
+        <CoverMainSummary/>
 
-      </Grid>
+      </Box>
 
       {/* Scroll Down Icon */}
-      <Grid container className={classes.centerScrolling}>
+      <Grid container className={classes.coverScroll} id='coverScroll'>
         <IconButton aria-label='scroll-down' >
           <ExpandMoreIcon />
         </IconButton>
@@ -122,14 +131,14 @@ export default function Cover() {
 
 // SUB SECTIONS
 
-function MainIntro(){
+function CoverMainIntro(){
   const classes = useStyles();
 
   const preventDefault = (e) => e.preventDefault()
 
 
   return (
-    <>
+    <Box id='coverMainIntro'>
       <Link href="" className={classes.ad} onClick={preventDefault}>
         <b>Looking for Full-Time Position</b> Imperial College Preliminary Year Student who Understand Project Management
       </Link>
@@ -145,34 +154,60 @@ function MainIntro(){
         <Button startIcon={<LinkedInIcon />}>LinkedIn</Button>
       </ButtonGroup>
 
-    </>
+    </Box>
   );
 }
 
-function MainSummary(){
+function CoverMainSummary(){
   const classes = useStyles();
 
   const [sectionId, setSectionId] = useState(0)
+  const [hoverId, setHoverId] = useState(0)
+  const [anchorEl, setAnchorEl] = useState(null)
+
+  const summaryData = coverSummaryGen()
 
   return(
-    <>
+    <Paper className={classes.mainSummary} id='coverMainSummary'>
+
+      {/* Selection UI */}
       <BottomNavigation
         value={sectionId}
         showLabels
         onChange={ (_,id) => (setSectionId(id)) }
+        id='coverMainSummaryButton'
       >
         {summaryData.map( function(d, i){
           var {icon} = category2icon(d.category);
           return (
-            <BottomNavigationAction key={i} label={d.category} icon={icon} />
+            <BottomNavigationAction
+              key={i}
+              label={d.category}
+              icon={icon}
+              onMouseOver={(e) => {setAnchorEl(e.currentTarget); setHoverId(i);}}
+              onMouseOut={(e) => setAnchorEl(null)}
+            />
           )
         })}
       </BottomNavigation>
 
+      {/* icon popper (conditional return) */}
+      {(summaryData[hoverId].img) ?
+        (<Popper
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        placement="top"
+        >
+          <Paper className={classes.mainSummaryPopover} id='coverMainSummaryPopper'>
+            {summaryData[hoverId].img}
+          </Paper>
+        </Popper>)
+      : <></>}
 
-      <Paper className={classes.test}>
+      {/* Content */}
+      <Box mx={3} className={classes.mainSummaryContent} id='coverMainSummaryContent'>
         {summaryData[sectionId].content}
-      </Paper>
-    </>
+      </Box>
+    </Paper>
   );
 }

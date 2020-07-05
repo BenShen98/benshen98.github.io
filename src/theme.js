@@ -14,7 +14,7 @@ const theme = createMuiTheme({
       main: red.A400,
     },
     background: {
-      default: '#ffffcc',
+      default: '#ffffff',
     },
   },
 
@@ -28,7 +28,7 @@ const theme = createMuiTheme({
     },
     h3:{
       fontSize: "1rem"
-    }
+    },
   }
 });
 export default theme;
