@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
-import {Box, Grid, Container} from '@material-ui/core';
+import {Box, Grid, Container, Popper} from '@material-ui/core';
 import {Button, ButtonGroup}  from '@material-ui/core';
 import {BottomNavigation, BottomNavigationAction}  from '@material-ui/core';
 import {Link}  from '@material-ui/core';
@@ -24,7 +24,7 @@ import category2icon from '../theme/category2icon'
 
 import { positions } from '@material-ui/system';
 
-import summaryData from '../data/cover_summary'
+import coverSummaryGen from '../data/cover_summary'
 
 //debugging
 import { Paper } from '@material-ui/core';
@@ -43,19 +43,37 @@ const useStyles = makeStyles((theme) => ({
   },
 
   mainIntro: {
+    marginBottom: theme.spacing(3),
+
     "& > *":{
       marginTop: theme.spacing(2) //margin for buttonGroup
-    }
+    },
   },
 
   mainSummary: {
+    margin: theme.spacing(1),
+    // maxHeight: "50%",
+    textAlign: "left",
+
     "& button":{
       paddingLeft: theme.spacing(3),
       paddingRight: theme.spacing(3)
-    }
+    },
+
+    "& ul": {marginTop: theme.spacing(1)},
+
+    "& li": {marginBottom: theme.spacing(1)},
   },
 
-  centerScrolling: {
+  mainSummaryPopover:{
+    padding: theme.spacing(1)
+  },
+
+  mainSummaryContent:{
+    overflow: "auto"
+  },
+
+  bottomScroll: {
     justifyContent: "center",
     marginBottom: buttonMargin,
     "& svg": {
@@ -78,14 +96,6 @@ const useStyles = makeStyles((theme) => ({
     }
   },
 
-  test:{
-    margin: theme.spacing(1),
-    // width: "100%",
-    height: theme.spacing(40),
-    "background-color": "#C0C0C0",
-    textAlign: "left",
-  }
-
 }));
 
 
@@ -93,24 +103,20 @@ export default function Cover() {
   const classes = useStyles();
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="md">
 
-      <Grid container className={classes.main} >
+      <Box className={classes.main} >
 
         {/* Intro (Welcome and Links) */}
-        <Grid item xs={12} className={classes.mainIntro}>
-          <MainIntro/>
-        </Grid>
+        <MainIntro/>
 
         {/* SUMMARY */}
-        <Grid item xs={12} className={classes.mainSummary}>
-          <MainSummary/>
-        </Grid>
+        <MainSummary/>
 
-      </Grid>
+      </Box>
 
       {/* Scroll Down Icon */}
-      <Grid container className={classes.centerScrolling}>
+      <Grid container className={classes.bottomScroll}>
         <IconButton aria-label='scroll-down' >
           <ExpandMoreIcon />
         </IconButton>
@@ -129,7 +135,7 @@ function MainIntro(){
 
 
   return (
-    <>
+    <Box className={classes.mainIntro}>
       <Link href="" className={classes.ad} onClick={preventDefault}>
         <b>Looking for Full-Time Position</b> Imperial College Preliminary Year Student who Understand Project Management
       </Link>
@@ -145,7 +151,7 @@ function MainIntro(){
         <Button startIcon={<LinkedInIcon />}>LinkedIn</Button>
       </ButtonGroup>
 
-    </>
+    </Box>
   );
 }
 
@@ -153,9 +159,15 @@ function MainSummary(){
   const classes = useStyles();
 
   const [sectionId, setSectionId] = useState(0)
+  const [hoverId, setHoverId] = useState(0)
+  const [anchorEl, setAnchorEl] = useState(null)
+
+  const summaryData = coverSummaryGen()
 
   return(
-    <>
+    <Paper className={classes.mainSummary} >
+
+      {/* Selection UI */}
       <BottomNavigation
         value={sectionId}
         showLabels
@@ -164,15 +176,34 @@ function MainSummary(){
         {summaryData.map( function(d, i){
           var {icon} = category2icon(d.category);
           return (
-            <BottomNavigationAction key={i} label={d.category} icon={icon} />
+            <BottomNavigationAction
+              key={i}
+              label={d.category}
+              icon={icon}
+              onMouseOver={(e) => {setAnchorEl(e.currentTarget); setHoverId(i);}}
+              onMouseOut={(e) => setAnchorEl(null)}
+            />
           )
         })}
       </BottomNavigation>
 
+      {/* icon popper (conditional return) */}
+      {(summaryData[hoverId].img) ?
+        (<Popper
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        placement="top"
+        >
+          <Paper className={classes.mainSummaryPopover}>
+            {summaryData[hoverId].img}
+          </Paper>
+        </Popper>)
+      : <></>}
 
-      <Paper className={classes.test}>
+      {/* Content */}
+      <Box mx={3} className={classes.mainSummaryContent}>
         {summaryData[sectionId].content}
-      </Paper>
-    </>
+      </Box>
+    </Paper>
   );
 }
