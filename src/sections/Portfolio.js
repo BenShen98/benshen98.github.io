@@ -8,6 +8,8 @@ import {Box, Grid, Container} from '@material-ui/core';
 import ProjectCard from '../components/ProjectCard'
 import PreviewDialog from '../components/PreviewDialog'
 
+import data_projects from '../data/projects_data'
+
 //debugging
 import { Paper } from '@material-ui/core';
 import Markdown from 'markdown-to-jsx';
@@ -55,42 +57,22 @@ export default function Portfolio(props) {
   return (
     <Container maxWidth={maxWidth}>
 
-
-
     {/* Grid full of containers */}
     <Grid spacing={2} justify="center" container>
 
-      <Grid item>
-      <ProjectCard
-        {...props}
-        projectData={projectData}
-        setPreviewContext={setPreviewContext}
-      />
-      </Grid>
-
-      {/* <Grid item>
-      <ProjectCard />
-      </Grid>
 
 
-      <Grid item>
-      <ProjectCard />
-      </Grid>
-
-
-      <Grid item>
-      <ProjectCard />
-      </Grid>
-
-      <Grid item>
-      <ProjectCard />
-      </Grid>
-
-
-      <Grid item>
-      <ProjectCard />
-      </Grid> */}
-
+      {data_projects.map(function(project, i){
+        return (
+          <Grid item key={i}>
+            <ProjectCard
+            {...props}
+            projectData={project}
+            setPreviewContext={setPreviewContext}
+            />
+          </Grid>
+        )
+      })}
     </Grid>
 
     <PreviewDialog

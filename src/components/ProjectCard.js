@@ -119,8 +119,7 @@ export default function ProjectCard({projectData, setPreviewContext, setUserProm
         className={clsx(classes.media,{
           [classes.clickable]: typeof projectData.preview != "undefined"
         })}
-        image="/static/images/cards/paella.jpg"
-        title="Paella dish"
+        image={projectData.imgSrc}
         onClick={handelPreviewClick}
       />
 
