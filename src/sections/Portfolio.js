@@ -8,7 +8,7 @@ import {Box, Grid, Container} from '@material-ui/core';
 import ProjectCard from '../components/ProjectCard'
 import PreviewDialog from '../components/PreviewDialog'
 
-import data_projects from '../data/projects_data'
+import projectDatas from '../data/projects_data'
 
 //debugging
 import { Paper } from '@material-ui/core';
@@ -21,32 +21,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const maxWidth='lg'
-var xxxx=`
-Raft
-======
-
-Component Structure
--------------------
-
-### Instance Initiation and Flow of Message
-`
-
-var projectData = {
-  category: "Academic",
-  title: "FooBoxxxxxxxxxxxxxxxxxxxxxo",
-  date: "Sept 2016",
-  summary: "fooboooxxx",
-
-  sourceCode: "https://google.com",
-  preview: <Markdown children={xxxx} />,
-  // codeComposition:[
-  //   { color: '#0000ff', name: 'Group A', value: 400},
-  //   { color: '#ff9999', name: 'Group B', value: 300},
-  //   { color: '#66ccff', name: 'Group C', value: 300},
-  //   { color: '#009933', name: 'Group D', value: 200},
-  // ]
-
-}
 
 export default function Portfolio(props) {
 
@@ -62,7 +36,7 @@ export default function Portfolio(props) {
 
 
 
-      {data_projects.map(function(project, i){
+      {projectDatas.map(function(project, i){
         return (
           <Grid item key={i}>
             <ProjectCard

@@ -102,8 +102,6 @@ export default function ProjectCard({projectData, setPreviewContext, setUserProm
 
   };
 
-
-
   return (
     <Card className={classes.root}>
 
@@ -133,7 +131,7 @@ export default function ProjectCard({projectData, setPreviewContext, setUserProm
         className={clsx(classes.media,{
           [classes.clickableMedia]: typeof projectData.preview != "undefined"
         })}
-        image={projectData.imgSrc}
+        image={require('./../data/'+projectData.imgSrc)}
         onClick={handelPreviewClick}
       />
 
