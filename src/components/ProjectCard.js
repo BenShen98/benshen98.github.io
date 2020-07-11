@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function ProjectCard({projectData, setPreviewContext, setUserPrompt}) {
+export default function ProjectCard({projectData, setHashStateProj, setUserPrompt}) {
 
   //  handel input
   const categoryIcon = category2icon(projectData.category || "")
@@ -92,13 +92,7 @@ export default function ProjectCard({projectData, setPreviewContext, setUserProm
 
   function handelPreviewClick(e){
     e.preventDefault()
-
-    if (typeof projectData.preview == "undefined"){
-      setUserPrompt ({info: `The Preview for ${projectData.title} is not currently available`})
-      return
-    }
-
-    setPreviewContext(projectData)
+    setHashStateProj(projectData.id)
 
   };
 
@@ -129,7 +123,7 @@ export default function ProjectCard({projectData, setPreviewContext, setUserProm
 
       <CardMedia
         className={clsx(classes.media,{
-          [classes.clickableMedia]: typeof projectData.preview != "undefined"
+          [classes.clickableMedia]: typeof projectData.previewSrc == "string"
         })}
         image={require('./../data/'+projectData.imgSrc)}
         onClick={handelPreviewClick}
@@ -137,10 +131,6 @@ export default function ProjectCard({projectData, setPreviewContext, setUserProm
 
 
       <CardContent>
-        {/* <Typography variant="body2" color="textSecondary" component="p">
-          This impressive paella is a perfect party dish and a fun meal to cook together with your
-          guests. Add 1 cup of frozen peas along with the mussels, if you like.
-        </Typography> */}
         <Markdown
           children={projectData.summary}
         />

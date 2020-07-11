@@ -6,35 +6,60 @@ import Container from '@material-ui/core/Container';
 
 import theme from './theme';
 
+import {HashContextProvider} from './contexts/HashContext'
+import dataProjects from './data/projects_data'
+
 // own components
 import CoverSection from './sections/Cover';
 import Portfolio from './sections/Portfolio';
 import UserPromptBar from './components/UserPromptBar'
+import PreviewDialog from './components/PreviewDialog'
 
 
+
+const projectPageMaxWidth='lg'
+const lutProjectName = dataProjects.reduce((acc, o, i)=>{acc[o.id]=i; return acc}, {})
 
 export default function App(){
   const [userPrompt, setUserPrompt] = useState({info:""}) // {severity: message}
 
+
   return(
     <ThemeProvider theme={theme}>
-    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-    <CssBaseline />
+      {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+      <CssBaseline />
 
-      {/* Cover Page */}
-      <CoverSection setUserPrompt={setUserPrompt} />
+      <HashContextProvider>
+        {/* Cover Page */}
+        <CoverSection
+          setUserPrompt={setUserPrompt}
+          dataProjects={dataProjects}
+          lutProjectName={lutProjectName}
+        />
 
-      {/* Projects */}
-      <Portfolio setUserPrompt={setUserPrompt} />
+        {/* Projects */}
+        <Portfolio
+          setUserPrompt={setUserPrompt}
+          maxWidth={projectPageMaxWidth}
+          dataProjects={dataProjects}
+        />
 
-      {/* Banner */}
-      <UserPromptBar
-        duration={5000}
-        userPrompt={userPrompt}
-        setUserPrompt={setUserPrompt}
-      />
+        {/* Project preview popper */}
+        <PreviewDialog
+          setUserPrompt={setUserPrompt}
+          fullWidth={true}
+          maxWidth={projectPageMaxWidth}
+          dataProjects={dataProjects}
+          lutProjectName={lutProjectName}
+         />
 
-
+        {/* Banner */}
+        <UserPromptBar
+          duration={5000}
+          userPrompt={userPrompt}
+          setUserPrompt={setUserPrompt}
+        />
+      </HashContextProvider>
 
     </ThemeProvider>
   )
