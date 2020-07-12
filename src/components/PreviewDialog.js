@@ -21,6 +21,7 @@ import Typography from '@material-ui/core/Typography';
 
 import Fab from "@material-ui/core/Fab";
 import GitHubIcon from '@material-ui/icons/GitHub';
+import { UserContext } from '../contexts/UserContext';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -61,6 +62,7 @@ export default function PreviewDialog(props) {
 
   // retrieve hashStateProj and previewContext
   const {hashStateProj, setHashStateProj} = useContext(HashContext)
+  const {openUrl} = useContext(UserContext)
   const previewContext = dataProjects[lutProjectName[hashStateProj]]
 
   // local state
@@ -93,10 +95,7 @@ export default function PreviewDialog(props) {
       return
     }
 
-    window.open(
-      previewContext.sourceCode,
-      '_blank'
-    )
+    openUrl(previewContext.sourceCode)
 
   };
 
@@ -118,6 +117,7 @@ export default function PreviewDialog(props) {
       onEntered={intro}
       onClose={closePreview}
       TransitionComponent={Transition}
+      scroll='paper'
     >
       <Fab color="secondary" aria-label="add" className={classes.fabButton} onClick={handelSourceCodeClick}>
         <GitHubIcon />

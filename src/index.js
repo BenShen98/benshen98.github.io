@@ -7,6 +7,8 @@ import Container from '@material-ui/core/Container';
 import theme from './theme';
 
 import {HashContextProvider} from './contexts/HashContext'
+import {UserContextProvider} from './contexts/UserContext'
+
 import dataProjects from './data/projects_data'
 
 // own components
@@ -25,43 +27,45 @@ export default function App(){
 
 
   return(
-    <ThemeProvider theme={theme}>
-      {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-      <CssBaseline />
+    <UserContextProvider>
+      <ThemeProvider theme={theme}>
+        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+        <CssBaseline />
 
-      <HashContextProvider>
-        {/* Cover Page */}
-        <CoverSection
-          setUserPrompt={setUserPrompt}
-          dataProjects={dataProjects}
-          lutProjectName={lutProjectName}
-        />
+        <HashContextProvider>
+          {/* Cover Page */}
+          <CoverSection
+            setUserPrompt={setUserPrompt}
+            dataProjects={dataProjects}
+            lutProjectName={lutProjectName}
+          />
 
-        {/* Projects */}
-        <Portfolio
-          setUserPrompt={setUserPrompt}
-          maxWidth={projectPageMaxWidth}
-          dataProjects={dataProjects}
-        />
+          {/* Projects */}
+          <Portfolio
+            setUserPrompt={setUserPrompt}
+            maxWidth={projectPageMaxWidth}
+            dataProjects={dataProjects}
+          />
 
-        {/* Project preview popper */}
-        <PreviewDialog
-          setUserPrompt={setUserPrompt}
-          fullWidth={true}
-          maxWidth={projectPageMaxWidth}
-          dataProjects={dataProjects}
-          lutProjectName={lutProjectName}
-         />
+          {/* Project preview popper */}
+          <PreviewDialog
+            setUserPrompt={setUserPrompt}
+            fullWidth={true}
+            maxWidth={projectPageMaxWidth}
+            dataProjects={dataProjects}
+            lutProjectName={lutProjectName}
+          />
 
-        {/* Banner */}
-        <UserPromptBar
-          duration={5000}
-          userPrompt={userPrompt}
-          setUserPrompt={setUserPrompt}
-        />
-      </HashContextProvider>
+          {/* Banner */}
+          <UserPromptBar
+            duration={5000}
+            userPrompt={userPrompt}
+            setUserPrompt={setUserPrompt}
+          />
+        </HashContextProvider>
 
-    </ThemeProvider>
+      </ThemeProvider>
+    </UserContextProvider>
   )
 }
 
