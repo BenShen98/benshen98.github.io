@@ -97,6 +97,7 @@ const useStyles = makeStyles((theme) => ({
 
   ad:{
     textAlign: "left",
+    cursor: "pointer",
     "&::before": {
       color: "#46a049",
       border: "1px solid #46a049",
@@ -146,12 +147,11 @@ function CoverMainIntro(){
   const classes = useStyles();
   const {openUrl} = useContext(UserContext)
 
-  const preventDefault = (e) => e.preventDefault()
-
+  const { setHashStatePath} = useContext(HashContext)
 
   return (
     <Box id='coverMainIntro'>
-      <Link href="" className={classes.ad} onClick={preventDefault}>
+      <Link className={classes.ad} onClick={() => setHashStatePath('/ad')}>
         <b>Looking for Full-Time Position</b> Imperial College Preliminary Year Student who Understand Project Management
       </Link>
 
@@ -161,9 +161,9 @@ function CoverMainIntro(){
       </Typography>
 
       <ButtonGroup>
-        <Button startIcon={<AttachFileIcon />}>Curriculum </Button>
-        <Button startIcon={<GitHubIcon />} onClick={() => openUrl(githubUrl)}>GitHub</Button>
-        <Button startIcon={<LinkedInIcon />} onClick={() => openUrl(linkedInUrl)}>LinkedIn</Button>
+        <Button startIcon={<AttachFileIcon/>} onClick={() => setHashStatePath('/cv')} >Curriculum </Button>
+        <Button startIcon={<GitHubIcon/>} onClick={() => openUrl(githubUrl)} >GitHub</Button>
+        <Button startIcon={<LinkedInIcon/>} onClick={() => openUrl(linkedInUrl)} >LinkedIn</Button>
       </ButtonGroup>
 
     </Box>

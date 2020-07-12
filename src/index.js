@@ -16,6 +16,7 @@ import CoverSection from './sections/Cover';
 import Portfolio from './sections/Portfolio';
 import UserPromptBar from './components/UserPromptBar'
 import PreviewDialog from './components/PreviewDialog'
+import ContactMe from './components/ContactMe'
 
 
 
@@ -40,6 +41,9 @@ export default function App(){
             lutProjectName={lutProjectName}
           />
 
+          {/* Contact me dialog */}
+          <ContactMe/>
+
           {/* Projects */}
           <Portfolio
             setUserPrompt={setUserPrompt}
@@ -56,7 +60,7 @@ export default function App(){
             lutProjectName={lutProjectName}
           />
 
-          {/* Banner */}
+          {/* Bottom Banner */}
           <UserPromptBar
             duration={5000}
             userPrompt={userPrompt}
