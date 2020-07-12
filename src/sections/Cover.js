@@ -127,7 +127,7 @@ export default function Cover() {
 
       {/* Scroll Down Icon */}
       <Grid container className={classes.coverScroll} id='coverScroll'>
-        <IconButton aria-label='scroll-down' >
+        <IconButton aria-label='scroll-down' onClick={()=>document.getElementById('portfolio').scrollIntoView({behavior: 'smooth'})}>
           <ExpandMoreIcon />
         </IconButton>
       </Grid>
