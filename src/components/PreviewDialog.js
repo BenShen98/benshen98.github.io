@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+import {HashContext} from './../contexts/HashContext'
 
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItem from '@material-ui/core/ListItem';
@@ -51,16 +54,35 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 
 export default function PreviewDialog(props) {
-
-
-  const { previewContext, setPreviewContext, fullWidth, maxWidth, setUserPrompt } = props;
+  const { lutProjectName, dataProjects, fullWidth, maxWidth, setUserPrompt } = props;
   const classes = useStyles();
+  const loadingPreviewData = <CircularProgress/>
 
+
+  // retrieve hashStateProj and previewContext
+  const {hashStateProj, setHashStateProj} = useContext(HashContext)
+  const previewContext = dataProjects[lutProjectName[hashStateProj]]
+
+  // local state
+  const [previewData, setPreviewData] = useState(loadingPreviewData)
   const [firstOpen, setFirstOpen] = useState(true);
 
-  // early exit
-  if (typeof previewContext == 'undefined')
-    return (<></>)
+  // callbacks on close
+  const closePreview = () => {setHashStateProj(undefined); setPreviewData(loadingPreviewData)}
+
+  // lazy load previewData
+  useEffect(()=>{
+    if (previewContext){
+      if (typeof previewContext.previewSrc === "string"){
+        import('./../data/'+previewContext.previewSrc)
+        .then(data=>setPreviewData(data.default))
+        .catch(()=>setUserPrompt({error: "Server Error, unable to retrieve preview data"}))
+      }else{
+        setUserPrompt ({info: `The Preview for ${previewContext.title} is not currently available`})
+        closePreview()
+      }
+    }
+  }, [previewContext])
 
   // callback on source code click
   function handelSourceCodeClick (e){
@@ -87,14 +109,14 @@ export default function PreviewDialog(props) {
   };
 
 
-  return (
 
+  return (
     <Dialog
       fullWidth={fullWidth}
       maxWidth={maxWidth}
       open={Boolean(previewContext)}
       onEntered={intro}
-      onClose={() => {setPreviewContext(undefined)}}
+      onClose={closePreview}
       TransitionComponent={Transition}
     >
       <Fab color="secondary" aria-label="add" className={classes.fabButton} onClick={handelSourceCodeClick}>
@@ -102,7 +124,7 @@ export default function PreviewDialog(props) {
       </Fab>
 
       <DialogContent dividers={true}>
-        {previewContext.preview}
+        {previewData}
       </DialogContent>
 
     </Dialog>

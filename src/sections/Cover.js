@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 
 import IconButton from '@material-ui/core/IconButton';
 
@@ -10,6 +10,7 @@ import {Button, ButtonGroup}  from '@material-ui/core';
 import {BottomNavigation, BottomNavigationAction}  from '@material-ui/core';
 import {Link}  from '@material-ui/core';
 
+import {HashContext} from './../contexts/HashContext'
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
@@ -29,8 +30,9 @@ import coverSummaryGen from '../data/cover_summary'
 //debugging
 import { Paper } from '@material-ui/core';
 
+import {HashContextConsumer} from '../contexts/HashContext'
 
-const pageTopMargin = "48px"
+const coverTopMargin = "48px"
 const coverScrollHeight = "56px"
 const bottomMargin = "16px"
 
@@ -38,9 +40,12 @@ const coverMainSummaryButtonHeight='56px'
 
 const useStyles = makeStyles((theme) => ({
 
+  coverTopMargin:{
+    height: coverTopMargin
+  },
+
   coverMain:{
-    height: `calc(100vh - ${coverScrollHeight} - ${pageTopMargin} - ${bottomMargin})`,
-    marginTop: pageTopMargin,
+    height: `calc(100vh - ${coverScrollHeight} - ${coverTopMargin} - ${bottomMargin})`,
     textAlign: "center",
 
     // INTRO
@@ -108,6 +113,8 @@ export default function Cover() {
   return (
     <Container maxWidth="md" id='cover'>
 
+      <Box className={classes.coverTopMargin}/>
+
       <Box className={classes.coverMain} id='coverMain'>
 
         {/* Intro (Welcome and Links) */}
@@ -120,7 +127,7 @@ export default function Cover() {
 
       {/* Scroll Down Icon */}
       <Grid container className={classes.coverScroll} id='coverScroll'>
-        <IconButton aria-label='scroll-down' >
+        <IconButton aria-label='scroll-down' onClick={()=>document.getElementById('portfolio').scrollIntoView({behavior: 'smooth'})}>
           <ExpandMoreIcon />
         </IconButton>
       </Grid>
@@ -158,23 +165,26 @@ function CoverMainIntro(){
   );
 }
 
+const summaryData = coverSummaryGen()
+const lutSummaryName = summaryData.reduce((acc, o, i)=>{acc[o.category]=i; return acc}, {})
+
 function CoverMainSummary(){
   const classes = useStyles();
+  const {hashStateSummary, setHashStateSummary} = useContext(HashContext)
 
-  const [sectionId, setSectionId] = useState(0)
+  const displayCategory = hashStateSummary in lutSummaryName ? hashStateSummary : summaryData[0].category
+
   const [hoverId, setHoverId] = useState(0)
   const [anchorEl, setAnchorEl] = useState(null)
-
-  const summaryData = coverSummaryGen()
 
   return(
     <Paper className={classes.mainSummary} id='coverMainSummary'>
 
       {/* Selection UI */}
       <BottomNavigation
-        value={sectionId}
+        value={displayCategory}
         showLabels
-        onChange={ (_,id) => (setSectionId(id)) }
+        onChange={ (_, value) => (setHashStateSummary(value)) }
         id='coverMainSummaryButton'
       >
         {summaryData.map( function(d, i){
@@ -183,6 +193,7 @@ function CoverMainSummary(){
             <BottomNavigationAction
               key={i}
               label={d.category}
+              value={d.category}
               icon={icon}
               onMouseOver={(e) => {setAnchorEl(e.currentTarget); setHoverId(i);}}
               onMouseOut={(e) => setAnchorEl(null)}
@@ -206,7 +217,7 @@ function CoverMainSummary(){
 
       {/* Content */}
       <Box mx={3} className={classes.mainSummaryContent} id='coverMainSummaryContent'>
-        {summaryData[sectionId].content}
+        {summaryData[lutSummaryName[displayCategory]].content}
       </Box>
     </Paper>
   );
