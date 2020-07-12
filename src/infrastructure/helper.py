@@ -150,6 +150,8 @@ class ProjectConfig:
 
     # linting
     for project_name, contents in projects.items():
+      # id
+      contents['id'] = project_name
 
       # title
       if 'title' not in contents:
@@ -172,7 +174,7 @@ class ProjectConfig:
         logging.error(f"{project_name} does not contains correct footerIcons field (should be list)")
 
       # previewSrc
-      if not isinstance(contents.get('previewSrc', None), list):
+      if not isinstance(contents.get('previewSrc', None), str):
         logging.warning(f"{project_name} does not contain a preview")
 
       # Src EXIST lint
