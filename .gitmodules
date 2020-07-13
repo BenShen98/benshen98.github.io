@@ -1,3 +1,6 @@
 [submodule "src/data"]
 	path = frontend/src/data
 	url = git@github.com:BenShen98/portfolio-data.git
+[submodule "backend"]
+	path = backend
+	url = git@github.com:BenShen98/portfolio-backend.git
