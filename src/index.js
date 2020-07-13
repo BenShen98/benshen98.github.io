@@ -7,6 +7,8 @@ import Container from '@material-ui/core/Container';
 import theme from './theme';
 
 import {HashContextProvider} from './contexts/HashContext'
+import {UserContextProvider} from './contexts/UserContext'
+
 import dataProjects from './data/projects_data'
 
 // own components
@@ -14,6 +16,7 @@ import CoverSection from './sections/Cover';
 import Portfolio from './sections/Portfolio';
 import UserPromptBar from './components/UserPromptBar'
 import PreviewDialog from './components/PreviewDialog'
+import ContactMe from './components/ContactMe'
 
 
 
@@ -25,43 +28,48 @@ export default function App(){
 
 
   return(
-    <ThemeProvider theme={theme}>
-      {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-      <CssBaseline />
+    <UserContextProvider>
+      <ThemeProvider theme={theme}>
+        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+        <CssBaseline />
 
-      <HashContextProvider>
-        {/* Cover Page */}
-        <CoverSection
-          setUserPrompt={setUserPrompt}
-          dataProjects={dataProjects}
-          lutProjectName={lutProjectName}
-        />
+        <HashContextProvider>
+          {/* Cover Page */}
+          <CoverSection
+            setUserPrompt={setUserPrompt}
+            dataProjects={dataProjects}
+            lutProjectName={lutProjectName}
+          />
 
-        {/* Projects */}
-        <Portfolio
-          setUserPrompt={setUserPrompt}
-          maxWidth={projectPageMaxWidth}
-          dataProjects={dataProjects}
-        />
+          {/* Contact me dialog */}
+          <ContactMe/>
 
-        {/* Project preview popper */}
-        <PreviewDialog
-          setUserPrompt={setUserPrompt}
-          fullWidth={true}
-          maxWidth={projectPageMaxWidth}
-          dataProjects={dataProjects}
-          lutProjectName={lutProjectName}
-         />
+          {/* Projects */}
+          <Portfolio
+            setUserPrompt={setUserPrompt}
+            maxWidth={projectPageMaxWidth}
+            dataProjects={dataProjects}
+          />
 
-        {/* Banner */}
-        <UserPromptBar
-          duration={5000}
-          userPrompt={userPrompt}
-          setUserPrompt={setUserPrompt}
-        />
-      </HashContextProvider>
+          {/* Project preview popper */}
+          <PreviewDialog
+            setUserPrompt={setUserPrompt}
+            fullWidth={true}
+            maxWidth={projectPageMaxWidth}
+            dataProjects={dataProjects}
+            lutProjectName={lutProjectName}
+          />
 
-    </ThemeProvider>
+          {/* Bottom Banner */}
+          <UserPromptBar
+            duration={5000}
+            userPrompt={userPrompt}
+            setUserPrompt={setUserPrompt}
+          />
+        </HashContextProvider>
+
+      </ThemeProvider>
+    </UserContextProvider>
   )
 }
 

@@ -11,6 +11,7 @@ import {BottomNavigation, BottomNavigationAction}  from '@material-ui/core';
 import {Link}  from '@material-ui/core';
 
 import {HashContext} from './../contexts/HashContext'
+import {UserContext} from '../contexts/UserContext'
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
@@ -30,13 +31,16 @@ import coverSummaryGen from '../data/cover_summary'
 //debugging
 import { Paper } from '@material-ui/core';
 
-import {HashContextConsumer} from '../contexts/HashContext'
+
 
 const coverTopMargin = "48px"
 const coverScrollHeight = "56px"
 const bottomMargin = "16px"
 
 const coverMainSummaryButtonHeight='56px'
+
+const linkedInUrl = "https://www.linkedin.com/in/benshen98"
+const githubUrl = "https://github.com/BenShen98"
 
 const useStyles = makeStyles((theme) => ({
 
@@ -93,6 +97,7 @@ const useStyles = makeStyles((theme) => ({
 
   ad:{
     textAlign: "left",
+    cursor: "pointer",
     "&::before": {
       color: "#46a049",
       border: "1px solid #46a049",
@@ -140,13 +145,13 @@ export default function Cover() {
 
 function CoverMainIntro(){
   const classes = useStyles();
+  const {openUrl} = useContext(UserContext)
 
-  const preventDefault = (e) => e.preventDefault()
-
+  const { setHashStatePath} = useContext(HashContext)
 
   return (
     <Box id='coverMainIntro'>
-      <Link href="" className={classes.ad} onClick={preventDefault}>
+      <Link className={classes.ad} onClick={() => setHashStatePath('/ad')}>
         <b>Looking for Full-Time Position</b> Imperial College Preliminary Year Student who Understand Project Management
       </Link>
 
@@ -156,9 +161,9 @@ function CoverMainIntro(){
       </Typography>
 
       <ButtonGroup>
-        <Button startIcon={<AttachFileIcon />}>Curriculum </Button>
-        <Button startIcon={<GitHubIcon />}>GitHub</Button>
-        <Button startIcon={<LinkedInIcon />}>LinkedIn</Button>
+        <Button startIcon={<AttachFileIcon/>} onClick={() => setHashStatePath('/cv')} >Curriculum </Button>
+        <Button startIcon={<GitHubIcon/>} onClick={() => openUrl(githubUrl)} >GitHub</Button>
+        <Button startIcon={<LinkedInIcon/>} onClick={() => openUrl(linkedInUrl)} >LinkedIn</Button>
       </ButtonGroup>
 
     </Box>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
@@ -22,6 +22,7 @@ import ProgressChart from './ProgressChart';
 import Markdown from 'markdown-to-jsx';
 
 import Fab from "@material-ui/core/Fab";
+import {UserContext} from '../contexts/UserContext'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -75,6 +76,9 @@ export default function ProjectCard({projectData, setHashStateProj, setUserPromp
   const categoryIcon = category2icon(projectData.category || "")
   const classes = useStyles();
 
+  const {openUrl} = useContext(UserContext)
+
+
   function handelSourceCodeClick (e){
     e.preventDefault()
 
@@ -83,10 +87,7 @@ export default function ProjectCard({projectData, setHashStateProj, setUserPromp
       return
     }
 
-    window.open(
-      projectData.sourceCode,
-      '_blank'
-    )
+    openUrl(projectData.sourceCode)
 
   };
 
