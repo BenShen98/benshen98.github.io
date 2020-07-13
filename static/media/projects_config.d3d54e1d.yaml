@@ -1,0 +1,39 @@
+config:
+  hidePrivate: True
+  codeComposationOtherColor: '#000000'
+  # dateFormat: StartEnd # use custom format
+
+
+projects:
+  benshen98.github.io:
+    title: Portfolio
+    category: Extracurricular
+    summary: boobar
+    previewSrc: # add to validation
+    imgSrc: projects/portfolio.png # add to validation
+    footerIcons: []
+
+  raft:
+    title: Raft Consensus
+    category: Academic
+    summary: Raft Consensus
+    previewSrc: projects/raft.js # add to validation
+    imgSrc: projects/raft.png # add to validation
+    footerIcons: []
+
+  robotics:
+    title: Probabilistic Localization
+    category: Academic
+    summary: |
+      Probabilistic Localization using Monte Carlo Particle Filter.
+      The graph above shows the particle evolution as the module receives the same reading in one direction.
+    previewSrc:
+    imgSrc: projects/robotics.gif
+
+
+
+
+
+# have a file which contains all the needed footerIcon design?
+footerIcons:
+  "react"
