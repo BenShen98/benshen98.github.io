@@ -38,7 +38,29 @@ export default function ContactMe(props){
   const updateInput = (e) => setFormData({...formData, [e.target.name]: e.target.value})
   const onFormSubmit = (e) => {
     e.preventDefault()
-    console.log(formData)
+
+    // get recaptcha and post data
+    // TODO: refactor?
+    window.grecaptcha.ready(function() {
+      window.grecaptcha.execute(process.env.REACT_APP_RECAPTCHA_SITE_KEY, {action: 'submit'}).then(function(token) {
+        // compose form payload
+        const payload = JSON.stringify({
+          formData,
+          reCapV3: token
+        })
+
+        // send data to backend
+        var xhr = new XMLHttpRequest()
+        xhr.open("POST", process.env.REACT_APP_CONTACT_ME_FORM_URL, true)
+        xhr.setRequestHeader("Content-Type", "application/json")
+        xhr.send(payload)
+
+        console.log(payload)
+
+      });
+    });
+
+
   }
 
   const open = ['/cv', '/ad'].indexOf(hashStatePath) > -1
