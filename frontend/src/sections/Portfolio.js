@@ -4,9 +4,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import {Box, Grid, Container} from '@material-ui/core';
 
-import {HashContext} from './../contexts/HashContext'
+import {HashContext} from 'contexts/HashContext'
 
-import ProjectCard from '../components/ProjectCard'
+import ProjectCard from 'components/ProjectCard'
 
 //debugging
 import { Paper } from '@material-ui/core';

@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import {HashContext} from './../contexts/HashContext'
+import {HashContext} from 'contexts/HashContext'
 
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItem from '@material-ui/core/ListItem';
@@ -21,7 +21,7 @@ import Typography from '@material-ui/core/Typography';
 
 import Fab from "@material-ui/core/Fab";
 import GitHubIcon from '@material-ui/icons/GitHub';
-import { UserContext } from '../contexts/UserContext';
+import { UserContext } from 'contexts/UserContext';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -76,7 +76,7 @@ export default function PreviewDialog(props) {
   useEffect(()=>{
     if (previewContext){
       if (typeof previewContext.previewSrc === "string"){
-        import('./../data/'+previewContext.previewSrc)
+        import('data/'+previewContext.previewSrc)
         .then(data=>setPreviewData(data.default))
         .catch(()=>setUserPrompt({error: "Server Error, unable to retrieve preview data"}))
       }else{

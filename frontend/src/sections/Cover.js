@@ -10,8 +10,8 @@ import {Button, ButtonGroup}  from '@material-ui/core';
 import {BottomNavigation, BottomNavigationAction}  from '@material-ui/core';
 import {Link}  from '@material-ui/core';
 
-import {HashContext} from './../contexts/HashContext'
-import {UserContext} from '../contexts/UserContext'
+import {HashContext} from 'contexts/HashContext'
+import {UserContext} from 'contexts/UserContext'
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
@@ -22,11 +22,11 @@ import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import LinkIcon from '@material-ui/icons/Link';
 // import LinkIcon from '@material-ui/icons';
 
-import category2icon from '../theme/category2icon'
+import category2icon from 'theme/category2icon'
 
 import { positions } from '@material-ui/system';
 
-import coverSummaryGen from '../data/cover_summary'
+import coverSummaryGen from 'data/cover_summary'
 
 //debugging
 import { Paper } from '@material-ui/core';

@@ -4,19 +4,19 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import theme from './theme';
+import theme from 'theme';
 
-import {HashContextProvider} from './contexts/HashContext'
-import {UserContextProvider} from './contexts/UserContext'
+import {HashContextProvider} from 'contexts/HashContext'
+import {UserContextProvider} from 'contexts/UserContext'
 
-import dataProjects from './data/projects_data'
+import dataProjects from 'data/projects_data'
 
 // own components
-import CoverSection from './sections/Cover';
-import Portfolio from './sections/Portfolio';
-import UserPromptBar from './components/UserPromptBar'
-import PreviewDialog from './components/PreviewDialog'
-import ContactMe from './components/ContactMe'
+import CoverSection from 'sections/Cover';
+import Portfolio from 'sections/Portfolio';
+import UserPromptBar from 'components/UserPromptBar'
+import PreviewDialog from 'components/PreviewDialog'
+import ContactMe from 'components/ContactMe'
 
 
 

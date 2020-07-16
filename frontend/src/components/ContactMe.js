@@ -1,7 +1,7 @@
 import React, {useContext, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
-import {HashContext} from './../contexts/HashContext'
+import {HashContext} from 'contexts/HashContext'
 
 import { Dialog, DialogContent, DialogTitle, DialogActions } from '@material-ui/core';
 import { TextField, Button } from '@material-ui/core';

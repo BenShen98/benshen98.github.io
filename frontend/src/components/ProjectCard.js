@@ -15,14 +15,14 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import GitHubIcon from '@material-ui/icons/GitHub';
 
-import category2icon from '../theme/category2icon'
+import category2icon from 'theme/category2icon'
 
-import ProgressChart from './ProgressChart';
+import ProgressChart from 'components/ProgressChart';
 
 import Markdown from 'markdown-to-jsx';
 
 import Fab from "@material-ui/core/Fab";
-import {UserContext} from '../contexts/UserContext'
+import {UserContext} from 'contexts/UserContext'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -126,7 +126,7 @@ export default function ProjectCard({projectData, setHashStateProj, setUserPromp
         className={clsx(classes.media,{
           [classes.clickableMedia]: typeof projectData.previewSrc == "string"
         })}
-        image={require('./../data/'+projectData.imgSrc)}
+        image={require('data/'+projectData.imgSrc)}
         onClick={handelPreviewClick}
       />
 
