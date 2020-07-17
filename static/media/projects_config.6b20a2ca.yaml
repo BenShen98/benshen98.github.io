@@ -11,7 +11,7 @@ projects:
     summary: boobar
     previewSrc: # add to validation
     imgSrc: projects/portfolio.png # add to validation
-    footerIcons: []
+    footerIcons: [Gcloud, React, Material]
 
   raft:
     title: Raft Consensus
@@ -19,7 +19,7 @@ projects:
     summary: Raft Consensus
     previewSrc: projects/raft.js # add to validation
     imgSrc: projects/raft.png # add to validation
-    footerIcons: []
+    footerIcons: [Elixir]
 
   robotics:
     title: Probabilistic Localization
@@ -29,11 +29,4 @@ projects:
       The graph above shows the particle evolution as the module receives the same reading in one direction.
     previewSrc:
     imgSrc: projects/robotics.gif
-
-
-
-
-
-# have a file which contains all the needed footerIcon design?
-footerIcons:
-  "react"
+    footerIcons: [BrickPi, Python, Lego]
