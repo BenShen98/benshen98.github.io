@@ -65,6 +65,10 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: red[500],
   },
+
+  footer: {
+    justifyContent: 'space-around'
+  }
 }));
 
 
@@ -138,7 +142,7 @@ export default function ProjectCard({projectData, setHashStateProj, setUserPromp
 
       </CardContent> */}
 
-      <CardActions children={projectData.footerIcons} />
+      <CardActions children={projectData.footerIcons} className={classes.footer} />
 
     </Card>
   );
