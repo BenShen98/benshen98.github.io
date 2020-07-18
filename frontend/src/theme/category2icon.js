@@ -8,7 +8,6 @@ import AccessibleForwardIcon from '@material-ui/icons/AccessibleForward';
 export default function category2icon(type){
     var notmatch = {
       icon: <></>,
-      backgroundColor: "red"
     }
 
     var lut = {

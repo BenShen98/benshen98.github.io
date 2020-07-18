@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
+import { Dialog, DialogContent, DialogTitle, DialogActions } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {HashContext} from 'contexts/HashContext'
@@ -21,32 +21,21 @@ import Typography from '@material-ui/core/Typography';
 
 import Fab from "@material-ui/core/Fab";
 import GitHubIcon from '@material-ui/icons/GitHub';
+import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 import { UserContext } from 'contexts/UserContext';
 
 
 const useStyles = makeStyles((theme) => ({
 
-  preview: {
-    padding: theme.spacing(2)
+  main: {
+    '& .MuiDialogActions-root': {
+      marginRight: theme.spacing(1),
+      '& button':{
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+      }
+    }
   },
-
-  appBar: {
-    position: 'relative',
-  },
-  title: {
-    marginLeft: theme.spacing(2),
-    flex: 1,
-  },
-
-  fabButton: {
-    position: "absolute",
-    zIndex: 2147483647,
-    // top: -30,
-    top: 0,
-    left: 0,
-    right: 0,
-    margin: "0 auto"
-  }
 }));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -86,19 +75,6 @@ export default function PreviewDialog(props) {
     }
   }, [previewContext])
 
-  // callback on source code click
-  function handelSourceCodeClick (e){
-    e.preventDefault()
-
-    if ( typeof previewContext.sourceCode != "string" || previewContext.sourceCode.length <= 0){
-      setUserPrompt ({info: `The Source Code for ${previewContext.title} is not publicly available`})
-      return
-    }
-
-    openUrl(previewContext.sourceCode)
-
-  };
-
   // first time luncher
   function intro(){
     if (firstOpen){
@@ -107,10 +83,38 @@ export default function PreviewDialog(props) {
     }
   };
 
+  // dynamic action data
+  const dialogActions = function(){
+    var actions = []
 
+    // safety check
+    if (!Boolean(previewContext)) return actions;
 
+    // report
+    if (typeof previewContext.reportSrc == "string" && previewContext.reportSrc.length > 0){
+      actions.push({
+        startIcon: <PictureAsPdfIcon/>,
+        children: "Report",
+        href: require('data/'+previewContext.reportSrc)
+      })
+    }
+
+    // github
+    if (typeof previewContext.sourceCode == "string" && previewContext.sourceCode.length > 0){
+      actions.push({
+        startIcon: <GitHubIcon />,
+        children: "Github",
+        href: previewContext.sourceCode
+      })
+    }
+
+    return actions
+  }()
+
+  console.log(previewData)
   return (
     <Dialog
+      className={classes.main}
       fullWidth={fullWidth}
       maxWidth={maxWidth}
       open={Boolean(previewContext)}
@@ -119,13 +123,21 @@ export default function PreviewDialog(props) {
       TransitionComponent={Transition}
       scroll='paper'
     >
-      <Fab color="secondary" aria-label="add" className={classes.fabButton} onClick={handelSourceCodeClick}>
-        <GitHubIcon />
-      </Fab>
 
       <DialogContent dividers={true}>
         {previewData}
       </DialogContent>
+
+      <DialogActions>
+        {dialogActions.map((action, i)=>
+          <Button
+            color="primary" variant="outlined"
+            onClick={(e)=>{e.preventDefault(); openUrl(e.currentTarget.href);}}
+            key={i}
+            {...action}
+          />
+        )}
+      </DialogActions>
 
     </Dialog>
   )

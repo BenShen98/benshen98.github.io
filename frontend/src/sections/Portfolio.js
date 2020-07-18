@@ -14,8 +14,13 @@ import Markdown from 'markdown-to-jsx';
 
 import GitHubIcon from '@material-ui/icons/GitHub';
 
-const useStyles = makeStyles((theme) => ({
+const portfolioTopMargin = "48px"
 
+const useStyles = makeStyles((theme) => ({
+  main:{
+    marginTop: portfolioTopMargin,
+    minHeight: `calc(100vh - ${portfolioTopMargin})`,
+  }
 }));
 
 export default function Portfolio(props) {
@@ -23,7 +28,7 @@ export default function Portfolio(props) {
   const {setHashStateProj} = useContext(HashContext)
 
   return (
-    <Container maxWidth={props.maxWidth} id='portfolio'>
+    <Container className={classes.main} maxWidth={props.maxWidth} id='portfolio'>
 
     {/* Grid full of containers */}
     <Grid spacing={2} justify="center" container>
