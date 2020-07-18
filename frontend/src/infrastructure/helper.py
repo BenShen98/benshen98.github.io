@@ -4,6 +4,7 @@ import requests
 import json
 import logging
 import yaml
+import re
 
 LOGGINGFORMAT='%(levelname)s: %(filename)s:%(lineno)d :%(message)s'
 
@@ -120,7 +121,7 @@ class ProjectConfig:
     self.projects = self.__loadProjects(meta['projects'])
 
     # output vars
-    self.outputheaders = {} # set
+    self.outputheaders = {"import React from 'react';"} # set
     # self.outputcontents = []
 
 
@@ -171,7 +172,7 @@ class ProjectConfig:
 
       # footerIcons
       if not isinstance(contents.get('footerIcons', None), list):
-        logging.error(f"{project_name} does not contains correct footerIcons field (should be list)")
+        logging.warning(f"{project_name} does not contains correct footerIcons fields (should be list)")
 
       # previewSrc
       if not isinstance(contents.get('previewSrc', None), str):
@@ -216,14 +217,23 @@ class ProjectConfig:
       # codeComposition
       project['codeComposition'] = self.translateLangeuages(gql_data['languages'])
 
-    # genearted output
-
-
+    # generate footerIcons
+    for project in self.projects.values():
+      if 'footerIcons' in project:
+        temp = []
+        for i, icon in enumerate(project['footerIcons']):
+          temp.append(f"<{icon}Icon key={{{i}}} />")
+          self.outputheaders.add(f"import {icon}Icon from 'icons/{icon}Icon';")
+        project['footerIcons'] = temp
 
     # write output
     contents += '\n'.join(self.outputheaders)
 
-    contents += f"export default {json.dumps(list(self.projects.values()), indent=2)}\n"
+    project_data = json.dumps(list(self.projects.values()), indent=2)
+    project_data = re.sub(r'\"(<[^/]+/>)\"', r'\1', project_data)
+
+
+    contents += f"export default {project_data}\n"
 
 
     return contents
