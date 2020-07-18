@@ -8,28 +8,23 @@ projects:
   benshen98.github.io:
     title: Portfolio
     category: Extracurricular
-    summary: boobar
-    previewSrc: # add to validation
-    imgSrc: projects/portfolio.png # add to validation
+    previewSrc: projects/portfolio/preview.js # add to validation
+    imgSrc: projects/portfolio/front.png # add to validation
     footerIcons: [Gcloud, React, Material]
 
 
   raft:
     title: Raft Consensus
     category: Academic
-    summary: Raft Consensus
     previewSrc: projects/raft/preview.js # add to validation
-    imgSrc: projects/raft.png # add to validation
+    imgSrc: projects/raft/front.png # add to validation
     footerIcons: [Elixir]
-    reportSrc: projects/raft/report.pdf
+    reportSrc: projects/raft/raftReport.pdf
     webpageHref:
 
   robotics:
     title: Probabilistic Localization
     category: Academic
-    summary: |
-      Probabilistic Localization using Monte Carlo Particle Filter.
-      The graph above shows the particle evolution as the module receives the same reading in one direction.
-    previewSrc:
-    imgSrc: projects/robotics.gif
+    previewSrc: projects/robotics/preview.js
+    imgSrc: projects/robotics/front.gif
     footerIcons: [BrickPi, Python, Lego]
