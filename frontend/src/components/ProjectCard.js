@@ -29,10 +29,22 @@ const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
     minWidth: 273,
-  },
-  media: {
-    height: "200px",
-    margin: theme.spacing(1),
+
+    '& .MuiCardHeader-avatar': {
+      color: '#556cd6',
+      '& svg': {
+        height: "30px",
+        width: "30px"
+      }
+    },
+    '& .MuiCardActions-root': {
+      height: "72px",
+      justifyContent: 'space-around'
+    },
+    '& .MuiCardMedia-root': {
+      height: "200px",
+      margin: theme.spacing(1),
+    }
   },
   clickableMedia: {
     cursor: "pointer",
@@ -51,24 +63,6 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
     },
   },
-
-  expand: {
-    transform: 'rotate(0deg)',
-    // marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-  avatar: {
-    backgroundColor: red[500],
-  },
-
-  footer: {
-    justifyContent: 'space-around'
-  }
 }));
 
 
@@ -106,11 +100,7 @@ export default function ProjectCard({projectData, setHashStateProj, setUserPromp
 
       <CardHeader
         // category
-        avatar={
-          <Avatar alt="" aria-label="recipe" style={{backgroundColor: categoryIcon.backgroundColor}}>
-            {categoryIcon.icon}
-          </Avatar>
-        }
+        avatar={categoryIcon.icon}
 
 
         action={
@@ -127,7 +117,7 @@ export default function ProjectCard({projectData, setHashStateProj, setUserPromp
       <ProgressChart data={projectData.codeComposition} unit="bytes" />
 
       <CardMedia
-        className={clsx(classes.media,{
+        className={clsx({
           [classes.clickableMedia]: typeof projectData.previewSrc == "string"
         })}
         image={require('data/'+projectData.imgSrc)}
@@ -142,7 +132,7 @@ export default function ProjectCard({projectData, setHashStateProj, setUserPromp
 
       </CardContent> */}
 
-      <CardActions children={projectData.footerIcons} className={classes.footer} />
+      <CardActions children={projectData.footerIcons}/>
 
     </Card>
   );

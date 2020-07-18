@@ -6,14 +6,9 @@ import {UserContext} from 'contexts/UserContext'
 
 const useStyles = makeStyles((theme) => ({
   main: props => ({
-    height: props.height || '50px',
-    width: props.width || '50px',
-    // backgroundImage: `url(${props.svg})`,
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    // "&:hover":{
-    //   // backgroundImage: `url(${props.svgHover || props.svg})`
-    // },
+    height: props.height || '35px',
+    width: props.width || '35px',
+
     "&:not(:hover)":{
       "& *":{
         fill: '#808080'
