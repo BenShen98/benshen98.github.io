@@ -161,7 +161,7 @@ function CoverMainIntro(){
       </Typography>
 
       <ButtonGroup>
-        <Button startIcon={<AttachFileIcon/>} onClick={() => setHashStatePath('/cv')} >Curriculum </Button>
+        <Button startIcon={<AttachFileIcon/>} onClick={() => setHashStatePath('/cv')} >Resume</Button>
         <Button startIcon={<GitHubIcon/>} onClick={() => openUrl(githubUrl)} >GitHub</Button>
         <Button startIcon={<LinkedInIcon/>} onClick={() => openUrl(linkedInUrl)} >LinkedIn</Button>
       </ButtonGroup>
