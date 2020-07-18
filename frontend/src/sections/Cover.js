@@ -208,7 +208,7 @@ function CoverMainSummary(){
       </BottomNavigation>
 
       {/* icon popper (conditional return) */}
-      {(summaryData[hoverId].img) ?
+      {/* {(summaryData[hoverId].img) ?
         (<Popper
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
@@ -218,7 +218,7 @@ function CoverMainSummary(){
             {summaryData[hoverId].img}
           </Paper>
         </Popper>)
-      : <></>}
+      : <></>} */}
 
       {/* Content */}
       <Box mx={3} className={classes.mainSummaryContent} id='coverMainSummaryContent'>
