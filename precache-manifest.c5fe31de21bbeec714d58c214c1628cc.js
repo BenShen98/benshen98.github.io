@@ -1,19 +1,19 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "179f4a643d1c47c9c0d374ec9bf8c302",
+    "revision": "31b737f01b95dffe79a41963df31b9cd",
     "url": "/index.html"
   },
   {
-    "revision": "46bcb639a6e5bb568d6f",
-    "url": "/static/js/2.fd464ce6.chunk.js"
+    "revision": "96f99e609037a50d009e",
+    "url": "/static/js/2.499d8ad7.chunk.js"
   },
   {
     "revision": "89b0379e7bcda1a468d8b0343aeb4e53",
-    "url": "/static/js/2.fd464ce6.chunk.js.LICENSE.txt"
+    "url": "/static/js/2.499d8ad7.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "e488f3ce0d082b03fb37",
-    "url": "/static/js/main.041cc44d.chunk.js"
+    "revision": "64a4a02013859583520b",
+    "url": "/static/js/main.fcc8bc98.chunk.js"
   },
   {
     "revision": "8aba14c5515e5362888a",
@@ -28,16 +28,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/media/portfolio.b433a55d.png"
   },
   {
-    "revision": "6b20a2ca4ac23b14d3af3932990ea1b1",
-    "url": "/static/media/projects_config.6b20a2ca.yaml"
-  },
-  {
-    "revision": "284f3dd3fe5bf97fb3c246f7d921778f",
-    "url": "/static/media/raft - 副本.284f3dd3.png"
+    "revision": "c6095dd47f9d53c1828fb19fb9c6cee2",
+    "url": "/static/media/projects_config.c6095dd4.yaml"
   },
   {
     "revision": "c79b7142d1f836a2f2b66ebbf1dae207",
     "url": "/static/media/raft.c79b7142.png"
+  },
+  {
+    "revision": "77ad6cc39b7df5505e4322c18dafda72",
+    "url": "/static/media/raftReport.77ad6cc3.pdf"
   },
   {
     "revision": "b2823d4381491207659abe896cb36593",

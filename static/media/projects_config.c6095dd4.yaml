@@ -13,13 +13,16 @@ projects:
     imgSrc: projects/portfolio.png # add to validation
     footerIcons: [Gcloud, React, Material]
 
+
   raft:
     title: Raft Consensus
     category: Academic
     summary: Raft Consensus
-    previewSrc: projects/raft.js # add to validation
+    previewSrc: projects/raft/preview.js # add to validation
     imgSrc: projects/raft.png # add to validation
     footerIcons: [Elixir]
+    reportSrc: projects/raft/report.pdf
+    webpageHref:
 
   robotics:
     title: Probabilistic Localization
