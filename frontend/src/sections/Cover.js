@@ -161,7 +161,7 @@ function CoverMainIntro(){
       </Typography>
 
       <ButtonGroup>
-        <Button startIcon={<AttachFileIcon/>} onClick={() => setHashStatePath('/cv')} >Curriculum </Button>
+        <Button startIcon={<AttachFileIcon/>} onClick={() => setHashStatePath('/cv')} >Resume</Button>
         <Button startIcon={<GitHubIcon/>} onClick={() => openUrl(githubUrl)} >GitHub</Button>
         <Button startIcon={<LinkedInIcon/>} onClick={() => openUrl(linkedInUrl)} >LinkedIn</Button>
       </ButtonGroup>
@@ -208,7 +208,7 @@ function CoverMainSummary(){
       </BottomNavigation>
 
       {/* icon popper (conditional return) */}
-      {(summaryData[hoverId].img) ?
+      {/* {(summaryData[hoverId].img) ?
         (<Popper
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
@@ -218,7 +218,7 @@ function CoverMainSummary(){
             {summaryData[hoverId].img}
           </Paper>
         </Popper>)
-      : <></>}
+      : <></>} */}
 
       {/* Content */}
       <Box mx={3} className={classes.mainSummaryContent} id='coverMainSummaryContent'>

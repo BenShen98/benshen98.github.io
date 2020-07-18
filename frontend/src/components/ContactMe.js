@@ -2,6 +2,7 @@ import React, {useContext, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import {HashContext} from 'contexts/HashContext'
+import { UserContext } from 'contexts/UserContext';
 
 import { Dialog, DialogContent, DialogTitle, DialogActions } from '@material-ui/core';
 import { TextField, Button } from '@material-ui/core';
@@ -10,18 +11,23 @@ import { Checkbox, FormGroup, FormControlLabel } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   form: {
+
+
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
     },
   },
+
   email: {
     width: '30ch',
   },
+
   name: {
     width: '20ch',
   },
+
   textarea:{
-    width: '60ch',
+    maxWidth: '60ch',
   }
 
 }));
@@ -30,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ContactMe(props){
   const classes = useStyles()
   const {hashStatePath, setHashStatePath} = useContext(HashContext)
+  const {openUrl} = useContext(UserContext)
 
   // formData && its call back function
   const [formData, setFormData] = useState({sendCV: true})
@@ -38,7 +45,33 @@ export default function ContactMe(props){
   const updateInput = (e) => setFormData({...formData, [e.target.name]: e.target.value})
   const onFormSubmit = (e) => {
     e.preventDefault()
-    console.log(formData)
+
+    // get recaptcha and post data
+    // TODO: refactor?
+    // TODO: error handling
+    window.grecaptcha.ready(function() {
+      window.grecaptcha.execute(process.env.REACT_APP_RECAPTCHA_SITE_KEY, {action: 'submit'}).then(function(token) {
+        // compose form payload
+        const payload = JSON.stringify({
+          formData,
+          reCapV3: token
+        })
+
+        // send data to backend
+        var xhr = new XMLHttpRequest()
+        xhr.open("POST", process.env.REACT_APP_CONTACT_ME_FORM_URL, true)
+        xhr.setRequestHeader("Content-Type", "application/json")
+        xhr.send(payload)
+
+        // TODO: different action based on server response
+        onExit();
+        openUrl(require('data/ben_shen_cv.pdf'));
+
+
+      });
+    });
+
+
   }
 
   const open = ['/cv', '/ad'].indexOf(hashStatePath) > -1
@@ -100,6 +133,8 @@ export default function ContactMe(props){
                 name="message"
                 value={formData.message || ''}
                 onChange={updateInput}
+
+                fullWidth={true}
 
                 className={classes.textarea}
                 margin="dense"
