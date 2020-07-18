@@ -152,7 +152,7 @@ function CoverMainIntro(){
   return (
     <Box id='coverMainIntro'>
       <Link className={classes.ad} onClick={() => setHashStatePath('/ad')}>
-        <b>Looking for Full-Time Position</b> Imperial College Preliminary Year Student who Understand Project Management
+        <b>Looking for Full-Time Position</b> Imperial College Penultimate Year Student who Understand Project Management
       </Link>
 
 

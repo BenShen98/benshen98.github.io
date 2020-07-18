@@ -162,9 +162,9 @@ class ProjectConfig:
       if contents.get('category', '') not in category_list:
         logging.error(f"{project_name} does not contains correct category field")
 
-      # summary
-      if not isinstance(contents.get('summary', None), str):
-        logging.error(f"{project_name} does not contains correct summary field")
+      # # summary
+      # if not isinstance(contents.get('summary', None), str):
+      #   logging.error(f"{project_name} does not contains correct summary field")
 
       # imgSrc
       if not (isinstance(contents.get('imgSrc', None), str) and len(contents['imgSrc'].split('/'))>1):

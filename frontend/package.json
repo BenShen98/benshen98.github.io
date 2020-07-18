@@ -15,11 +15,12 @@
     "@material-ui/icons": "latest",
     "@material-ui/lab": "latest",
     "clsx": "latest",
+    "gh-pages": "latest",
+    "markdown-to-jsx": "latest",
+    "qrcode.react": "^1.0.0",
     "react": "latest",
     "react-dom": "latest",
-    "react-scripts": "latest",
-    "gh-pages": "latest",
-    "markdown-to-jsx": "latest"
+    "react-scripts": "latest"
   },
   "browserslist": {
     "production": [

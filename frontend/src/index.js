@@ -21,6 +21,7 @@ import ContactMe from 'components/ContactMe'
 
 
 const projectPageMaxWidth='lg'
+const PreviewDialogMaxWidth='md'
 const lutProjectName = dataProjects.reduce((acc, o, i)=>{acc[o.id]=i; return acc}, {})
 
 export default function App(){
@@ -55,7 +56,7 @@ export default function App(){
           <PreviewDialog
             setUserPrompt={setUserPrompt}
             fullWidth={true}
-            maxWidth={projectPageMaxWidth}
+            maxWidth={PreviewDialogMaxWidth}
             dataProjects={dataProjects}
             lutProjectName={lutProjectName}
           />

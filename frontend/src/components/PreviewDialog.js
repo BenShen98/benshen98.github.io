@@ -34,6 +34,12 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1),
       }
+    },
+
+    '& .MuiDialogContent-root':{
+      '& *':{
+        maxWidth: "100%"
+      }
     }
   },
 }));
