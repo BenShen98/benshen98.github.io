@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ContactMe(props){
   const classes = useStyles()
-  const {hashStatePath, setHashStatePath} = useContext(HashContext)
+  const {hashStatePath, setHashStatePath, requestFactory} = useContext(HashContext)
   const {openUrl} = useContext(UserContext)
 
   // formData && its call back function
@@ -46,18 +46,11 @@ export default function ContactMe(props){
   const onFormSubmit = (e) => {
     e.preventDefault()
 
-    // compose form payload
-    const payload = JSON.stringify({
-      formData
-    })
-
     // send data to backend
-    var xhr = new XMLHttpRequest()
-    xhr.open("POST", process.env.REACT_APP_CONTACT_ME_FORM_URL, true)
-    xhr.setRequestHeader("Content-Type", "application/json")
-    xhr.send(payload)
+    requestFactory('contact', formData)
+    .then((d) => console.log('ok'))
+    .catch((d) => console.log('error'))
 
-    // TODO: different action based on server response
     onExit();
     openUrl(require('data/ben_shen_cv.pdf'));
 

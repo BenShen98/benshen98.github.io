@@ -70,18 +70,18 @@ const HashContextConsumer = HashContext.Consumer
 
 
 function HashContextProvider(props){
-  // stateful code
+  // stateful code (hashStateHistory is the only useState)
   const [hashStateHistory, setHashStatesHistory] = useState([])
 
   function getHashState(){
     const state = hashStateHistory[hashStateHistory.length-1] || {}
     var returnState = Object.assign({}, state)
-    delete returnState.__time__
+    delete returnState._time_ms
     return returnState
   }
 
   function setHashState(newState){
-    newState['__time__'] = Math.floor(Date.now()/1000)
+    newState['_time_ms'] = Date.now()
     setHashStatesHistory(preHistory => [...preHistory, newState])
 
   }
@@ -111,19 +111,61 @@ function HashContextProvider(props){
   // analytics hash
   const [hashStateReferral, setHashStateReferral] = breakoutState('ref')
 
-
+  // run once on init
   useEffect(()=> {
     window.onhashchange = (e) => {e.preventDefault(); setHashState(parseHash(e.newURL)); }
     setHashState(parseHash(window.location.hash)); // trigger for first time
-    console.log('should run once')
   }, []); //empty dependency (since it set up a call back, only execute once)
+
+  // helper functions
+  function requestFactory(dest, formData){
+    // create payload
+    console.log('xxxxx', hashStateSummary)
+    const payload = JSON.stringify({
+      formData,
+      hashStateHistory,
+    })
+
+    // send xhr and get promise
+    return new Promise(function (resolve, reject){
+
+      var xhr = new XMLHttpRequest()
+      xhr.open("POST", `${process.env.REACT_APP_BACKEND_BASE_URL}/${dest}`)
+      xhr.setRequestHeader("Content-Type", "application/json")
+
+
+      xhr.onerror = function(){
+        reject({
+          status: xhr.status,
+          response: xhr.response
+        })
+      }
+
+      xhr.onload = function(){
+        if (xhr.status >= 200 && xhr.status < 300){
+          resolve(xhr.response)
+        }else{
+          xhr.onerror()
+        }
+      }
+
+      xhr.send(payload)
+
+
+  })
+  }
 
   return(
     <HashContext.Provider value={{
+      // current stat getter/setter
       hashStatePath, setHashStatePath,
       hashStateProj, setHashStateProj,
       hashStateSummary, setHashStateSummary,
       hashStateReferral, setHashStateReferral,
+
+      // others
+      hashStateHistory,
+      requestFactory
     }}
     >{props.children}</HashContext.Provider>
   )
