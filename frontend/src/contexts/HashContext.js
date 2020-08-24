@@ -70,6 +70,10 @@ const HashContextConsumer = HashContext.Consumer
 
 
 function HashContextProvider(props){
+
+  // ****************
+  // state
+  // ****************
   // stateful code (hashStateHistory is the only useState)
   const [hashStateHistory, setHashStatesHistory] = useState([])
 
@@ -86,7 +90,10 @@ function HashContextProvider(props){
 
   }
 
-  // stateless codes
+
+  // ****************
+  // state helper
+  // ****************
 
   function updateWindowHash(name, value){
     let newHashState = {...getHashState(), [name]:value};
@@ -103,6 +110,11 @@ function HashContextProvider(props){
     return [getHashState()[name], setBreakoutState]
   }
 
+
+  // ****************
+  // state effect
+  // ****************
+
   // page state hash
   const [hashStatePath, setHashStatePath] = breakoutState('hashPath')
   const [hashStateProj, setHashStateProj] = breakoutState('project')
@@ -111,14 +123,38 @@ function HashContextProvider(props){
   // analytics hash
   const [hashStateReferral, setHashStateReferral] = breakoutState('ref')
 
-  // run once on init
+
+  // ****************
+  // state effect
+  // ****************
   useEffect(()=> {
     window.onhashchange = (e) => {e.preventDefault(); setHashState(parseHash(e.newURL)); }
     setHashState(parseHash(window.location.hash)); // trigger for first time
   }, []); //empty dependency (since it set up a call back, only execute once)
 
-  // helper functions
-  function requestFactory(dest, formData){
+
+  // ****************
+  // analytic effects
+  // ****************
+  //
+  // on init
+  useEffect(()=>{
+    requestFactory('beacon', {init: parseHash(window.location.hash)})
+  }, []);
+
+  //on exit
+  useEffect(()=>{
+    window.onunload = ()=>requestFactory('beacon', null, true)
+  }, [hashStateHistory]);
+
+
+  // ****************
+  // request functions
+  // ****************
+  function requestFactory(dest, formData=null, beaconMode=false){
+    // dest url
+    const destUrl = `${process.env.REACT_APP_BACKEND_BASE_URL}/${dest}`
+
     // create payload
     console.log('xxxxx', hashStateSummary)
     const payload = JSON.stringify({
@@ -127,34 +163,40 @@ function HashContextProvider(props){
     })
 
     // send xhr and get promise
-    return new Promise(function (resolve, reject){
+    if (beaconMode){
+      return navigator.sendBeacon(destUrl, payload)
 
-      var xhr = new XMLHttpRequest()
-      xhr.open("POST", `${process.env.REACT_APP_BACKEND_BASE_URL}/${dest}`)
-      xhr.setRequestHeader("Content-Type", "application/json")
+    }else{
+      return new Promise(function (resolve, reject){
+        var xhr = new XMLHttpRequest()
+        xhr.open("POST", destUrl)
+        xhr.setRequestHeader("Content-Type", "text/plain")
 
 
-      xhr.onerror = function(){
-        reject({
-          status: xhr.status,
-          response: xhr.response
-        })
-      }
-
-      xhr.onload = function(){
-        if (xhr.status >= 200 && xhr.status < 300){
-          resolve(xhr.response)
-        }else{
-          xhr.onerror()
+        xhr.onerror = function(){
+          reject({
+            status: xhr.status,
+            response: xhr.response
+          })
         }
-      }
 
-      xhr.send(payload)
+        xhr.onload = function(){
+          if (xhr.status >= 200 && xhr.status < 300){
+            resolve(xhr.response)
+          }else{
+            xhr.onerror()
+          }
+        }
 
-
-  })
+        xhr.send(payload)
+      })
+    }
   }
 
+
+  // ****************
+  // return
+  // ****************
   return(
     <HashContext.Provider value={{
       // current stat getter/setter
