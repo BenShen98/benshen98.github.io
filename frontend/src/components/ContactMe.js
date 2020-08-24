@@ -46,31 +46,20 @@ export default function ContactMe(props){
   const onFormSubmit = (e) => {
     e.preventDefault()
 
-    // get recaptcha and post data
-    // TODO: refactor?
-    // TODO: error handling
-    window.grecaptcha.ready(function() {
-      window.grecaptcha.execute(process.env.REACT_APP_RECAPTCHA_SITE_KEY, {action: 'submit'}).then(function(token) {
-        // compose form payload
-        const payload = JSON.stringify({
-          formData,
-          reCapV3: token
-        })
+    // compose form payload
+    const payload = JSON.stringify({
+      formData
+    })
 
-        // send data to backend
-        var xhr = new XMLHttpRequest()
-        xhr.open("POST", process.env.REACT_APP_CONTACT_ME_FORM_URL, true)
-        xhr.setRequestHeader("Content-Type", "application/json")
-        xhr.send(payload)
+    // send data to backend
+    var xhr = new XMLHttpRequest()
+    xhr.open("POST", process.env.REACT_APP_CONTACT_ME_FORM_URL, true)
+    xhr.setRequestHeader("Content-Type", "application/json")
+    xhr.send(payload)
 
-        // TODO: different action based on server response
-        onExit();
-        openUrl(require('data/ben_shen_cv.pdf'));
-
-
-      });
-    });
-
+    // TODO: different action based on server response
+    onExit();
+    openUrl(require('data/ben_shen_cv.pdf'));
 
   }
 
