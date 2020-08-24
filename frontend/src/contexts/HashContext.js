@@ -56,11 +56,40 @@ const HashContext = React.createContext()
 const HashContextConsumer = HashContext.Consumer
 
 
-function HashContextProvider(props){
-  const [hashState, setHashState] = useState({})
+// workflow:
+//   inital load:
+//     1. add setHashState to onhashchange event listener
+//     2. run setHashState to get inital HashState
 
-  function updateHashState(name, value){
-    let newHashState = {...hashState, [name]:value};
+//   program change state:
+//     1. setHashState... is called
+//         -> updateHashState is called
+//         -> location.hash is changed
+//     2. onhashchange is called
+//         -> setHashState is called
+
+
+function HashContextProvider(props){
+  // stateful code
+  const [hashStateHistory, setHashStatesHistory] = useState([])
+
+  function getHashState(){
+    const state = hashStateHistory[hashStateHistory.length-1] || {}
+    var returnState = Object.assign({}, state)
+    delete returnState.__time__
+    return returnState
+  }
+
+  function setHashState(newState){
+    newState['__time__'] = Math.floor(Date.now()/1000)
+    setHashStatesHistory(preHistory => [...preHistory, newState])
+
+  }
+
+  // stateless codes
+
+  function updateWindowHash(name, value){
+    let newHashState = {...getHashState(), [name]:value};
 
     if (typeof value !== 'string')
       delete newHashState[name]
@@ -68,14 +97,19 @@ function HashContextProvider(props){
     window.location.hash = genHash(newHashState)
   }
 
+
   function breakoutState(name){
-    const setBreakoutState = (value) => updateHashState(name,value)
-    return [hashState[name], setBreakoutState]
+    const setBreakoutState = (value) => updateWindowHash(name,value)
+    return [getHashState()[name], setBreakoutState]
   }
 
+  // page state hash
   const [hashStatePath, setHashStatePath] = breakoutState('hashPath')
   const [hashStateProj, setHashStateProj] = breakoutState('project')
   const [hashStateSummary, setHashStateSummary] = breakoutState('summary')
+
+  // analytics hash
+  const [hashStateReferral, setHashStateReferral] = breakoutState('ref')
 
 
   useEffect(()=> {
@@ -88,28 +122,11 @@ function HashContextProvider(props){
     <HashContext.Provider value={{
       hashStatePath, setHashStatePath,
       hashStateProj, setHashStateProj,
-      hashStateSummary, setHashStateSummary
+      hashStateSummary, setHashStateSummary,
+      hashStateReferral, setHashStateReferral,
     }}
     >{props.children}</HashContext.Provider>
   )
 }
 
-export { HashContext, HashContextProvider, HashContextConsumer}
-
-// // function decode
-// const hashChange = {
-
-// }
-
-// export default hashChange
-// export function onHashChangeMain(){
-
-// }
-
-// export function onHashChangePreview(){
-
-// }
-
-// export function makeHashChangePreview(){
-
-// }
+export { HashContext, HashContextProvider, HashContextConsumer, parseHash}
