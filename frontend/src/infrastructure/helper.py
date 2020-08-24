@@ -27,6 +27,11 @@ class Github:
               }
             }
           }
+          submodules(first: 100) {
+            nodes {
+              gitUrl
+            }
+          }
         }'''
 
     def request(self, query, variable=None):
@@ -183,7 +188,7 @@ class ProjectConfig:
 
     return projects
 
-  def translateLangeuages(self, languages):
+  def translateLanguages(self, languages):
     codeComposition=[]
     totalSize = int(languages['totalSize'])
 
@@ -199,7 +204,7 @@ class ProjectConfig:
 
     return codeComposition
 
-  def generatejs(self, github):
+  def generatejs(self, github, check_submodules=True):
     contents = "// This file is generated from meta yaml file\n\n"
 
     # query graph ql
@@ -214,8 +219,53 @@ class ProjectConfig:
       if not (self.configs['hidePrivate'] and gql_data['isPrivate']):
         project['sourceCode'] = gql_data['url']
 
-      # codeComposition
-      project['codeComposition'] = self.translateLangeuages(gql_data['languages'])
+      # codeComposition (if check_submodules: check submodules recursively)
+      if check_submodules:
+
+        # create dict for current
+        print(self.translateLanguages(gql_data['languages']))
+        code_composition = { code['name'] : code for code in self.translateLanguages(gql_data['languages'])}
+
+        def get_submodules(submodules):
+          pattern = re.compile('git@github.com:benshen98/([\w\.-]+)\.git',  re.IGNORECASE)
+          repo_names = []
+          for submodule in submodules['nodes']:
+            res = pattern.match(submodule['gitUrl'])
+            if res and res.group(1):
+              repo_names.append(res.group(1))
+            else:
+              logging.warning(f'Unable to extract submodule repo {submodule}')
+
+          return repo_names
+
+        stack = get_submodules(gql_data['submodules'])
+        submodules_set = set(stack)
+        while stack:
+          sub_gql_data = github.readRepo(stack.pop())
+
+          # update stack
+          for subsubmodule in get_submodules(sub_gql_data['submodules']):
+            if subsubmodule not in submodules_set:
+              submodules_set.add(subsubmodule)
+              stack.append(subsubmodule)
+
+          # update code composition
+          for code in self.translateLanguages(sub_gql_data['languages']):
+            if code['name'] in code_composition:
+              code_composition[code['name']]['value'] += code['value']
+            else:
+              code_composition[code['name']] = code
+
+        # write out put
+        project['codeComposition'] = sorted(code_composition.values(), key=lambda code: code['value'], reverse=True)
+
+      else:
+        project['codeComposition'] = self.translateLanguages(gql_data['languages'])
+
+
+
+
+
 
     # generate footerIcons
     for project in self.projects.values():
