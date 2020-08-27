@@ -76,16 +76,19 @@ function HashContextProvider(props){
   // ****************
   // stateful code (hashStateHistory is the only useState)
   const [hashStateHistory, setHashStatesHistory] = useState([])
+  const [sessionId, setSessionId] = useState('')
+
+
 
   function getHashState(){
     const state = hashStateHistory[hashStateHistory.length-1] || {}
     var returnState = Object.assign({}, state)
-    delete returnState._time_ms
+    delete returnState.timestamp
     return returnState
   }
 
   function setHashState(newState){
-    newState['_time_ms'] = Date.now()
+    newState['timestamp'] = Date.now()
     setHashStatesHistory(preHistory => [...preHistory, newState])
 
   }
@@ -139,57 +142,52 @@ function HashContextProvider(props){
   //
   // on init
   useEffect(()=>{
-    requestFactory('beacon', {init: parseHash(window.location.hash)})
+    requestFactory('startSession', {init: parseHash(window.location.hash)})
   }, []);
 
   //on exit
   useEffect(()=>{
-    window.onunload = ()=>requestFactory('beacon', null, true)
-  }, [hashStateHistory]);
+    window.onunload = ()=>requestFactory('endSession', null, true)
+  }, [hashStateHistory, sessionId]);
 
 
   // ****************
   // request functions
   // ****************
-  function requestFactory(dest, formData=null, beaconMode=false){
+  function requestFactory(intent, intentData=null, beaconMode=false){
     // dest url
-    const destUrl = `${process.env.REACT_APP_BACKEND_BASE_URL}/${dest}`
+    const destUrl = `${process.env.REACT_APP_BACKEND_BASE_URL}/session`
 
     // create payload
-    console.log('xxxxx', hashStateSummary)
     const payload = JSON.stringify({
-      formData,
+      intent,
+      intentData,
       hashStateHistory,
+      sessionId
     })
 
     // send xhr and get promise
     if (beaconMode){
-      return navigator.sendBeacon(destUrl, payload)
+      navigator.sendBeacon(destUrl, payload)
 
     }else{
-      return new Promise(function (resolve, reject){
-        var xhr = new XMLHttpRequest()
-        xhr.open("POST", destUrl)
-        xhr.setRequestHeader("Content-Type", "text/plain")
+      var xhr = new XMLHttpRequest()
+      xhr.open("POST", destUrl)
+      xhr.setRequestHeader("Content-Type", "text/plain")
 
+      xhr.onerror = function(){
+        console.log(xhr.response)
+      }
 
-        xhr.onerror = function(){
-          reject({
-            status: xhr.status,
-            response: xhr.response
-          })
+      xhr.onload = function(){
+        if (xhr.status >= 200 && xhr.status < 300){
+          setSessionId(xhr.response)
+        }else{
+          xhr.onerror()
         }
+      }
 
-        xhr.onload = function(){
-          if (xhr.status >= 200 && xhr.status < 300){
-            resolve(xhr.response)
-          }else{
-            xhr.onerror()
-          }
-        }
-
-        xhr.send(payload)
-      })
+      xhr.send(payload)
     }
   }
 

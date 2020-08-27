@@ -47,10 +47,7 @@ export default function ContactMe(props){
     e.preventDefault()
 
     // send data to backend
-    requestFactory('contact', formData)
-    .then((d) => console.log('ok'))
-    .catch((d) => console.log('error'))
-
+    requestFactory('contact', formData);
     onExit();
     openUrl(require('data/ben_shen_cv.pdf'));
 
