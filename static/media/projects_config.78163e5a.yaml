@@ -28,3 +28,34 @@ projects:
     previewSrc: projects/robotics/preview.js
     imgSrc: projects/robotics/front.gif
     footerIcons: [BrickPi, Python, Lego]
+
+  smart_home:
+    title: Smart Home
+    category: Extracurricular
+    previewSrc: projects/smart_home/preview.js
+    imgSrc: projects/smart_home/front.jpg
+    footerIcons: [Docker, Balena, Zigbee2MQTT]
+
+  RTOS-MotorControl-HashCompute:
+    title: Real Time Concurrent Controller
+    category: Academic
+    previewSrc: projects/RTOS/preview.js
+    imgSrc: projects/RTOS/front.jpg
+    reportSrc: projects/RTOS/RTOSReport.pdf
+    footerIcons: [CPP]
+
+
+  C90Compiler:
+    title: C90 Compiler
+    category: Academic
+    previewSrc: projects/compiler/preview.js
+    imgSrc: projects/compiler/front.png
+    footerIcons: [CPP, Bison]
+
+
+  mips:
+    title: CPU Simulator
+    category: Academic
+    previewSrc: projects/mips/preview.js
+    imgSrc: projects/mips/front.png
+    footerIcons: [CPP]
