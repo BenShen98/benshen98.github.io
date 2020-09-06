@@ -36,10 +36,9 @@ const useStyles = makeStyles((theme) => ({
 export default function ContactMe(props){
   const classes = useStyles()
   const {hashStatePath, setHashStatePath, requestFactory} = useContext(HashContext)
-  const {openUrl} = useContext(UserContext)
 
   // formData && its call back function
-  const [formData, setFormData] = useState({sendCV: true})
+  const [formData, setFormData] = useState({})
   const updateFormData = (name, value) => setFormData({...formData, [name]: value})
   const updateCheckBox = (e) => setFormData({...formData, [e.target.name]: e.target.checked})
   const updateInput = (e) => setFormData({...formData, [e.target.name]: e.target.value})
@@ -49,7 +48,6 @@ export default function ContactMe(props){
     // send data to backend
     requestFactory('contact', formData);
     onExit();
-    openUrl(require('data/ben_shen_cv.pdf'));
 
   }
 
@@ -62,29 +60,11 @@ export default function ContactMe(props){
       open={open}
       onClose={onExit}
     >
-      <DialogTitle id="max-width-dialog-title">Learn More about Me</DialogTitle>
+      <DialogTitle id="max-width-dialog-title">Get In Touch</DialogTitle>
 
       <form className={classes.form} action='/' method='POST' onSubmit={onFormSubmit}>
-        <DialogContent>
-          <FormGroup row>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="sendCV"
-                  checked={Boolean(formData.sendCV)}
-                  onChange={updateCheckBox}
-                />
-              }
+        <DialogContent style={{paddingTop: 0}}>
 
-              label="Send me a copy of CV"
-
-            />
-
-          </FormGroup>
-
-
-          { Boolean(formData.sendCV) &&
-            <>
               <TextField
                 name="sendCVEmail"
                 value={formData.sendCVEmail || ''}
@@ -94,7 +74,7 @@ export default function ContactMe(props){
                 autoFocus
                 margin="dense"
                 required={true}
-                label="Email Address"
+                label="Your Email Address"
                 type="email"
                 />
               <TextField
@@ -105,7 +85,7 @@ export default function ContactMe(props){
                 className={classes.name}
                 margin="dense"
                 required={true}
-                label="Name"
+                label="Your Name"
                 type="string"
               />
               <TextField
@@ -121,8 +101,6 @@ export default function ContactMe(props){
                 label="Message (optional)"
                 multiline={true}
                 />
-            </>
-          }
         </DialogContent>
 
         <DialogActions>
@@ -130,7 +108,7 @@ export default function ContactMe(props){
             color="primary"
             type="submit"
           >
-            View CV
+            Send
           </Button>
         </DialogActions>
       </form>

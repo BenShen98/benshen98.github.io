@@ -14,12 +14,10 @@ import Markdown from 'markdown-to-jsx';
 
 import GitHubIcon from '@material-ui/icons/GitHub';
 
-const portfolioTopMargin = "48px"
 
 const useStyles = makeStyles((theme) => ({
   main:{
-    marginTop: portfolioTopMargin,
-    minHeight: `calc(100vh - ${portfolioTopMargin})`,
+    marginTop: theme.spacing(4)
   }
 }));
 
