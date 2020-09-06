@@ -163,7 +163,8 @@ function HashContextProvider(props){
       intent,
       intentData,
       hashStateHistory,
-      sessionId
+      sessionId,
+      referrerPage: document.referrer
     })
 
     // send xhr and get promise
