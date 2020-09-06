@@ -56,11 +56,50 @@ const HashContext = React.createContext()
 const HashContextConsumer = HashContext.Consumer
 
 
-function HashContextProvider(props){
-  const [hashState, setHashState] = useState({})
+// workflow:
+//   inital load:
+//     1. add setHashState to onhashchange event listener
+//     2. run setHashState to get inital HashState
 
-  function updateHashState(name, value){
-    let newHashState = {...hashState, [name]:value};
+//   program change state:
+//     1. setHashState... is called
+//         -> updateHashState is called
+//         -> location.hash is changed
+//     2. onhashchange is called
+//         -> setHashState is called
+
+
+function HashContextProvider(props){
+
+  // ****************
+  // state
+  // ****************
+  // stateful code (hashStateHistory is the only useState)
+  const [hashStateHistory, setHashStatesHistory] = useState([])
+  const [sessionId, setSessionId] = useState('')
+
+
+
+  function getHashState(){
+    const state = hashStateHistory[hashStateHistory.length-1] || {}
+    var returnState = Object.assign({}, state)
+    delete returnState.timestamp
+    return returnState
+  }
+
+  function setHashState(newState){
+    newState['timestamp'] = Date.now()
+    setHashStatesHistory(preHistory => [...preHistory, newState])
+
+  }
+
+
+  // ****************
+  // state helper
+  // ****************
+
+  function updateWindowHash(name, value){
+    let newHashState = {...getHashState(), [name]:value};
 
     if (typeof value !== 'string')
       delete newHashState[name]
@@ -68,48 +107,109 @@ function HashContextProvider(props){
     window.location.hash = genHash(newHashState)
   }
 
+
   function breakoutState(name){
-    const setBreakoutState = (value) => updateHashState(name,value)
-    return [hashState[name], setBreakoutState]
+    const setBreakoutState = (value) => updateWindowHash(name,value)
+    return [getHashState()[name], setBreakoutState]
   }
 
+
+  // ****************
+  // state effect
+  // ****************
+
+  // page state hash
   const [hashStatePath, setHashStatePath] = breakoutState('hashPath')
   const [hashStateProj, setHashStateProj] = breakoutState('project')
   const [hashStateSummary, setHashStateSummary] = breakoutState('summary')
 
+  // analytics hash
+  const [hashStateReferral, setHashStateReferral] = breakoutState('ref')
 
+
+  // ****************
+  // state effect
+  // ****************
   useEffect(()=> {
     window.onhashchange = (e) => {e.preventDefault(); setHashState(parseHash(e.newURL)); }
     setHashState(parseHash(window.location.hash)); // trigger for first time
-    console.log('should run once')
   }, []); //empty dependency (since it set up a call back, only execute once)
 
+
+  // ****************
+  // analytic effects
+  // ****************
+  //
+  // on init
+  useEffect(()=>{
+    requestFactory('startSession', {init: parseHash(window.location.hash)})
+  }, []);
+
+  //on exit
+  useEffect(()=>{
+    window.onunload = ()=>requestFactory('endSession', null, true)
+  }, [hashStateHistory, sessionId]);
+
+
+  // ****************
+  // request functions
+  // ****************
+  function requestFactory(intent, intentData=null, beaconMode=false){
+    // dest url
+    const destUrl = `${process.env.REACT_APP_BACKEND_BASE_URL}/session`
+
+    // create payload
+    const payload = JSON.stringify({
+      intent,
+      intentData,
+      hashStateHistory,
+      sessionId,
+      referrerPage: document.referrer
+    })
+
+    // send xhr and get promise
+    if (beaconMode){
+      navigator.sendBeacon(destUrl, payload)
+
+    }else{
+      var xhr = new XMLHttpRequest()
+      xhr.open("POST", destUrl)
+      xhr.setRequestHeader("Content-Type", "text/plain")
+
+      xhr.onerror = function(){
+        console.log(xhr.response)
+      }
+
+      xhr.onload = function(){
+        if (xhr.status >= 200 && xhr.status < 300){
+          setSessionId(xhr.response)
+        }else{
+          xhr.onerror()
+        }
+      }
+
+      xhr.send(payload)
+    }
+  }
+
+
+  // ****************
+  // return
+  // ****************
   return(
     <HashContext.Provider value={{
+      // current stat getter/setter
       hashStatePath, setHashStatePath,
       hashStateProj, setHashStateProj,
-      hashStateSummary, setHashStateSummary
+      hashStateSummary, setHashStateSummary,
+      hashStateReferral, setHashStateReferral,
+
+      // others
+      hashStateHistory,
+      requestFactory
     }}
     >{props.children}</HashContext.Provider>
   )
 }
 
-export { HashContext, HashContextProvider, HashContextConsumer}
-
-// // function decode
-// const hashChange = {
-
-// }
-
-// export default hashChange
-// export function onHashChangeMain(){
-
-// }
-
-// export function onHashChangePreview(){
-
-// }
-
-// export function makeHashChangePreview(){
-
-// }
+export { HashContext, HashContextProvider, HashContextConsumer, parseHash}
